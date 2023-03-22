@@ -1,0 +1,28 @@
+{% extends 'myapp/base.html' %} <!-- EP6 ทำ block content กับหน้า base.html -->
+
+
+{% block content %}
+  
+<div class="container">
+
+  <h3>สินค้าทั้งหมดในร้าน</h3>
+  <p>ตอนนี้เรามีสินค้าให้เลือกทั้งหมดหลายรายการ</p>
+
+  {% for pd in product %} <!-- EP6 product คือ อ้างอิงจาก key ใน views.py -->
+    <div class="card" style="width:400px"> 
+        <img class="card-img-top"src="{{ pd.imageurl }}" width="400">
+        <div class="card-body">
+          <h1 class="card-title">{{ pd.name  }}</h1>
+          <p> {{ pd.price }}</p>
+          <p> {{ pd.detail}}</p>
+      </div>
+    </div>
+    <br><br>
+
+  {% endfor %}
+
+</div>
+
+
+{% endblock content %}
+  

@@ -34,9 +34,9 @@ def Addproduct(request):
         detail = data.get('detail')
         imageurl = data.get('imageurl')
         
-         # สร้างตัวแปร new  = Allproduct()  Allproduct คือ database เพื่อที่จะบันทึกข้อมูลใหม่ลงไป
-        new.name= name
+        # สร้างตัวแปร new  = Allproduct()  Allproduct คือ database เพื่อที่จะบันทึกข้อมูลใหม่ลงไป
         new = Allproduct()
+        new.name = name 
         new.price = price
         new.detail = detail
         new.imageurl = imageurl
@@ -44,5 +44,10 @@ def Addproduct(request):
 
     return render(request,'myapp/addproduct.html')
 
+# EP6
+def Product(request):
+    product = Allproduct.objects.all() #EP6 ดึงข้อมูลมาจาก Models .objects.all ดึงข้อมูลมาทั้งหมด
+    context = {'product':product}
+    return render(request,'myapp/allproduct.html',context)
 
 
