@@ -25,7 +25,7 @@ SECRET_KEY = '*px)+lkgb-gbs1t7&ld2lgvtbl43=5$7=ej(&+53qw^@!0o9%q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] # EP5 '*' ทำให้ run ngrok ได้
 
 
 # Application definition

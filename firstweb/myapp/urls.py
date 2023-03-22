@@ -7,4 +7,5 @@ urlpatterns = [
     path('about/',About, name='about-page'),
     path('contact/',Contact, name='contact-page'),
     path('apple/',Apple, name='apple-page'),
+    path('addproduct/',Addproduct, name='addproduct-page'), #EP5
 ]

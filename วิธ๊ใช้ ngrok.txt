@@ -1,0 +1,21 @@
+สมัครวมาชิก ngrok ให้เรียบร้อย 
+
+เข้าไปยืนยันในการใช้ dashboard
+https://dashboard.ngrok.com/user/settings
+
+1.คลิกที่ file ngrok.exe
+2. ngrok aothtoken 2NKNLL7umSEU2Z64UY2yT3HVaoZ_3rwG9RjCze55q1p7ucoD9
+
+                    2NKNLL7umSEU2Z64UY2yT3HVaoZ_3rwG9RjCze55q1p7ucoD9 >>>> คือ Token จากเว็บที่ออกมาให้
+
+3.ngrok http 8000 >>>> ตาม port ที่ run django
+
+
+  RUN PORT 8000
+
+1. python manage.py runserver 0.0.0.0:8000
+2. cmd พิมพ์ ipconfig
+3. IPv4 Address. . . . . . . . . . . : 192.168.60.69
+4.192.168.60.69:8000
+
+
