@@ -1,54 +1,54 @@
-{% extends 'myapp/base.html' %} 
-<!--import base.html ((ไม่ต้องใส่ template/myapp/base.html)เพราะtemplate ตั้งค่าที่setting.แล้ว) -->
+{% extends 'myapp/base.html' %} <!-- EP6 ทำ block content กับหน้า base.html -->
 
 {% block content %}
-	<h2>สินค้าทั้งหมดในร้าน</h2>
-	<p>ตอนนี้เรามีสินค้าให้เลือกชมหลายรายการ</p>
+  
+<div class="container">
 
-	<!-- ดึงข้อมูลจาก model มาโชว์ใน html-->
-	<!-- product คือคีย์ใน views.py-->
+  <h3>สินค้าทั้งหมดในร้าน</h3>
+  <p>ตอนนี้เรามีสินค้าให้เลือกทั้งหมดหลายรายการ</p>
 
-	<div class="container-fluid">
-			<div class="row">
+  <div class="container-fluid"> <!-- EP7 ทำ Grid system -->
+    <div class="row"> <!-- EP7 ทำ Grid system -->
 
-	 {% for pd in product %}
-		<div class="col-sm-4">
+      {% for pd in product %} <!-- EP6 product คือ อ้างอิงจาก key ใน views.py -->
+        <div class="col-sm-4"> <!-- EP7 ทำ Grid system -->
+          <div class="card" style="width:300px">  
 
-					<div class="card" style="width:300px; height: 520px;">
+                  {% if pd.image %} <!-- EP7 Showpicture อัพโหลดจากคอมpd.image.url ถ้าเป็น url ใช้ {{ pd.imageurl}} -->
+                  <img class="card-img-top" src="{{ pd.image.url }}" width="300">
+                  {% elif pd.imageurl != None %}
+                  <img class="card-img-top" src="{{ pd.imageurl }}" width="300"> 
+                  {% else %}
+                     <img class="card-img-top" src="/media/default.png" width="300">
+                  {% endif %}
 
-						{% if pd.image %}
-						<img class="card-img-top" src="{{ pd.image.url }}" width="300" style="width: 300px; height: 200px; overflow: hidden;">
-						{% elif pd.imageurl != None %}
-						<img class="card-img-top" src="{{ pd.imageurl }}" width="300" style="width: 300px; height: 200px; overflow: hidden;">
-						{% else %}
-							<img class="card-img-top" src="/media/default.png" width="300" style="width: 300px; height: 200px; overflow: hidden;">
-						{% endif %}
 
-						<div class="card-body">
-						<h1 class="card-title"> {{ pd.name }}</h1>
-						<p>{{ pd.price }} บาท/ {{ pd.unit }}</p>
-						<p>{{ pd.detail|linebreaks|truncatechars_html:80 }}</p>
+              <div class="card-body">
+                <h1 class="card-title">{{ pd.name  }}</h1>
+                <p>ราคา {{ pd.price }} บาท/{{ pd.unit }}</p>
+                <p> {{ pd.detail}}</p>
 
-						{% if pd.quantity > 0 %}
-						<p>สินค้ามีในสต๊อก: {{ pd.quantity }}  {{ pd.unit }}</p>
-						{% else %}
-							<p><font color="red"> สินค้าอาจจะหมดสต็อก กรุณาติดต่อแอดมิน</font></p>
+                {%  if pd.quantity > 0 %}
+                  <p>สินค้ามีในสต๊อก: {{ pd.quantity }} {{ pd.unit }} </p>
 
-						{% endif %}
+                {% else %}
+                    <p><font color="red">สินค้าอาจจะหมดสต็อก กรุณาติดต่อแอดมิน</font></p>
+                {% endif %}
 
-							{% if pd.instock == True %}
+                <!-- EP7 ตรวจสอบเงื่อนไข ถ้ามีสินค้าให้แสดงรายการสั่งซื้อ ถ้าไม่มีให้แสดงปุ่มสินค้าหมด -->
+                {% if pd.instock == True %}
+                  <a href="#" class="btn btn-success">สั่งซื้อ</a> 
+                {% else %}
+                  <a href="#" class="btn btn-warning">สินค้าหมดแล้ว</a> 
+                {% endif %}
 
-											<a href="#" class  = "btn btn-success">สั่งซื้อ</a>
-							{% else %}
+              </div>
+          </div><br><br>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 
-									<a href="#" class  = "btn btn-warning">สินค้าหมด</a>
+</div>
 
-							{% endif %}
-					</div>
-				</div>
-			<br><br>
-		</div>
-	{% endfor %}
-	</div>
- </div>
 {% endblock content %}
