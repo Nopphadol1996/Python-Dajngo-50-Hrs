@@ -1,10 +1,10 @@
-{% extends 'myapp/base.html' %} <!-- EP6 ทำ block content กับหน้า base.html -->
+{% extends 'myapp/base.html' %} 
+<!--import base.html ((ไม่ต้องใส่ template/myapp/base.html)เพราะtemplate ตั้งค่าที่setting.แล้ว) -->
+
 {% block content %}
 
-<div class="container">
-  <h3>ติดต่อเรา</h3>
-  <p>ติดต่อได้ที่ 02-999-999</p>
 
-</div>
-
+  <h3>ติดต่อเราได้อย่างไร</h3>
+  <p>ติดต่อเราได้ที่ เบอร์มือถือ 084-234-5678</p>
+  
 {% endblock content %}

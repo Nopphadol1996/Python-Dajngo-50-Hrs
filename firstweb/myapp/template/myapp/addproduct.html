@@ -1,42 +1,52 @@
-{% extends 'myapp/base.html' %} <!-- EP6 ทำ block content กับหน้า base.html -->
-
+{% extends 'myapp/base.html' %} 
+<!--import base.html ((ไม่ต้องใส่ template/myapp/base.html)เพราะtemplate ตั้งค่าที่setting.แล้ว) -->
 
 {% block content %}
-<div class="container">
+
+<div class="container" style="margin-bottom: 100px;">
 
 <h2>เพิ่มสินค้าในระบบ</h2>
-  <p>คุณสามารถเพิ่มสินค้าเพิ่มเข้าไปในระบบได้ (เฉพาะแอดมิน)</p>
+	<p>คุณสามารถเพิ่มสินค้าเข้าไปในระบบได้ (เฉพาะแอดมิน)</p>
 
-  <form method="POST">
-    {% csrf_token %}
-  <!-- <form method="POST">  {% csrf_token %} 
-    เป็นแกรมม่าของ Django  EP5 จร้า...-->
+	<form method="POST" enctype="multipart/form-data">
+	{% csrf_token %} <!-- ระบบความปลอดภัยของ Django	-->
 
-    <div class="form-group">
-      <label for="name">ชื่อสินค้า:</label>
-      <input type="text" class="form-control" id="name" name="name">
-    </div>
+		<div class="form-group">
+			<label for="name">ชื่อสินค้า:</label>
+			<input type="text" class="form-control" id="name" name="name">
+		</div>
 
-    <div class="form-group">
-      <label for="price">ราคา:</label>
-      <input type="text" class="form-control" id="price" name="price">
-    </div>
+		<div class="form-group">
+			<label for="price">ราคา:</label>
+			<input type="text" class="form-control" id="price" name="price">
+		</div>
 
-    <div class="form-group">
-      <label for="detail">รายละเอียด:</label>
-      <textarea class="form-control" rows="5" id="detail" name='detail'></textarea>
-    </div>
+		<div class="form-group">
+     		 <label for="detial">รายละเอียด:</label>
+      		 <textarea class="form-control" rows="5" id="detial" name="detial"></textarea>
+        </div>
+	
+		<div class="form-group">
+			<label for="imageurl">URL รูปสินค้า:</label>
+			<input type="text" class="form-control" id="imageurl" name="imageurl">
+		</div>
 
-    <div class="form-group">
-      <label for="imageurl">URL รูปสินค้า:</label>
-      <input type="text" class="form-control" id="imageurl" name="imageurl">
-    </div>
+		<div class="form-group">
+			<label for="quantity">จำนวนสินค้า</label>
+			<input type="text" class="form-control" id="quantity" name="quantity">
+		</div>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+		<div class="form-group">
+			<label for="unit">หน่วยสินค้า</label>
+			<input type="text" class="form-control" id="unit" name="unit">
+		</div>
 
+		<div class="form-group">
+			<label for="imageupload">เลือกรูปจากเครื่อง</label>
+			<input type="file" class="form-control" id="imageupload" name="imageupload">
+		</div>
 
-
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
 </div>
-
 {% endblock content %}

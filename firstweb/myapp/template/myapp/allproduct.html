@@ -1,28 +1,54 @@
-{% extends 'myapp/base.html' %} <!-- EP6 ทำ block content กับหน้า base.html -->
-
+{% extends 'myapp/base.html' %} 
+<!--import base.html ((ไม่ต้องใส่ template/myapp/base.html)เพราะtemplate ตั้งค่าที่setting.แล้ว) -->
 
 {% block content %}
-  
-<div class="container">
+	<h2>สินค้าทั้งหมดในร้าน</h2>
+	<p>ตอนนี้เรามีสินค้าให้เลือกชมหลายรายการ</p>
 
-  <h3>สินค้าทั้งหมดในร้าน</h3>
-  <p>ตอนนี้เรามีสินค้าให้เลือกทั้งหมดหลายรายการ</p>
+	<!-- ดึงข้อมูลจาก model มาโชว์ใน html-->
+	<!-- product คือคีย์ใน views.py-->
 
-  {% for pd in product %} <!-- EP6 product คือ อ้างอิงจาก key ใน views.py -->
-    <div class="card" style="width:400px"> 
-        <img class="card-img-top"src="{{ pd.imageurl }}" width="400">
-        <div class="card-body">
-          <h1 class="card-title">{{ pd.name  }}</h1>
-          <p> {{ pd.price }}</p>
-          <p> {{ pd.detail}}</p>
-      </div>
-    </div>
-    <br><br>
+	<div class="container-fluid">
+			<div class="row">
 
-  {% endfor %}
+	 {% for pd in product %}
+		<div class="col-sm-4">
 
-</div>
+					<div class="card" style="width:300px; height: 520px;">
 
+						{% if pd.image %}
+						<img class="card-img-top" src="{{ pd.image.url }}" width="300" style="width: 300px; height: 200px; overflow: hidden;">
+						{% elif pd.imageurl != None %}
+						<img class="card-img-top" src="{{ pd.imageurl }}" width="300" style="width: 300px; height: 200px; overflow: hidden;">
+						{% else %}
+							<img class="card-img-top" src="/media/default.png" width="300" style="width: 300px; height: 200px; overflow: hidden;">
+						{% endif %}
 
+						<div class="card-body">
+						<h1 class="card-title"> {{ pd.name }}</h1>
+						<p>{{ pd.price }} บาท/ {{ pd.unit }}</p>
+						<p>{{ pd.detail|linebreaks|truncatechars_html:80 }}</p>
+
+						{% if pd.quantity > 0 %}
+						<p>สินค้ามีในสต๊อก: {{ pd.quantity }}  {{ pd.unit }}</p>
+						{% else %}
+							<p><font color="red"> สินค้าอาจจะหมดสต็อก กรุณาติดต่อแอดมิน</font></p>
+
+						{% endif %}
+
+							{% if pd.instock == True %}
+
+											<a href="#" class  = "btn btn-success">สั่งซื้อ</a>
+							{% else %}
+
+									<a href="#" class  = "btn btn-warning">สินค้าหมด</a>
+
+							{% endif %}
+					</div>
+				</div>
+			<br><br>
+		</div>
+	{% endfor %}
+	</div>
+ </div>
 {% endblock content %}
-  

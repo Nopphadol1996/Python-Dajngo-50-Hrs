@@ -1,4 +1,7 @@
 from django.contrib import admin
-from .models import Allproduct # EP4  นำเข้า Class Allproduct ในหน้า models.py
+from.models import Allproduct #EP4
 
-admin.site.register(Allproduct)
+admin.site.register(Allproduct) # ทำให้ฐานข้อมูลเห็น models
+
+
+

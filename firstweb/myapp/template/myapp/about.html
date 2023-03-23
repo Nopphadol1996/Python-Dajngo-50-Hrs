@@ -1,15 +1,9 @@
-{% extends 'myapp/base.html' %} <!-- EP6 ทำ block content กับหน้า base.html -->
-
+{% extends 'myapp/base.html' %} 
+<!--import base.html ((ไม่ต้องใส่ template/myapp/base.html)เพราะtemplate ตั้งค่าที่setting.แล้ว) -->
 
 {% block content %}
+
+  <h3>เราคือใคร</h3>
+  <p>ร้านของเราเป็นร้านขายผลไม้ Organic <br> ไม่ฉีดสารเคมีปลอดภัยหายห่วงจร้า...  </p>
   
-<div class="container">
-
-  <h3>เราคือใคร?</h3>
-  <p>ร้านของเราเป็นร้านผลไม้ Organic <br> ไม่ฉีดสารเคมี </p>
- 
-</div>
-
-
-{% endblock content %}
-  
+ {% endblock content %}

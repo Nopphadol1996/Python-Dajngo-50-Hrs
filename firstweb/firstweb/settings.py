@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*px)+lkgb-gbs1t7&ld2lgvtbl43=5$7=ej(&+53qw^@!0o9%q'
+SECRET_KEY = 'evcr0dhv#yy=fn-5y&q)1h$sy)f2_66g)@9hv)=je2i-4l$f4#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*'] # EP5 '*' ทำให้ run ngrok ได้
+ALLOWED_HOSTS = ['*']  # ['*'] ให้รัน ngrok ได้
 
 
 # Application definition
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'firstweb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'myapp/template')], # ทำให้ Django รู้จักตำแหน่ง Folder ของเรา
+        'DIRS': [os.path.join(BASE_DIR, 'myapp/template')],# EP3 ทำให้ Djangoรู้จักตำแหน่งโฟล์เดอร์ของเรา
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,3 +119,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# EP7 ทำ upload image form
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+
+## EP9 ทำหน้า LOGIN
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home-page' # ถ้า login จะให้ไปหน้าไหน
+LOGOUT_REDIRECT_URL = 'login' # ถ้า logout จะให้ไปหน้าไหน
