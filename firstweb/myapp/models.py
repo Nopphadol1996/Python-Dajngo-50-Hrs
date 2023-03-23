@@ -15,8 +15,7 @@ class Allproduct(models.Model): # EP4
 	instock = models.BooleanField(default=True) # EP7 เช็คสินค้า
 	quantity = models.IntegerField(default=1) # EP7 จำนวนสินค้า
 	unit = models.CharField(max_length=200,default='-') # EP7 หน่วยสินค้า ถ้า user ไม่กรอกจะกำหนดค่า default
-	image = models.ImageField(upload_to="products",null=True,blank=True)# EP7 สร้าง field ใส่Photo
-
+	image = models.ImageField(upload_to="products",null=True,blank=True)# EP7 สร้าง field ใส่Photo 
 	
 
 

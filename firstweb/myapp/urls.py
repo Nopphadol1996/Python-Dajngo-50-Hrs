@@ -9,4 +9,6 @@ urlpatterns = [
     path('apple/',Apple, name='apple-page'),
     path('addproduct/',Addproduct, name='addproduct-page'), #EP5
     path('allproduct/',Product, name='allproduct-page'), #EP6
+    path('register/',Register, name='register-page'),#EP8 ทำ Register>> localhost:8000/register
+
 ]

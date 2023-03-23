@@ -19,8 +19,13 @@
           <a href="{% url 'home-page' %}">หน้าแรก</a>|
           <a href="{% url 'about-page' %}">เกี่ยวกับเรา</a>|
           <a href="{% url 'contact-page' %}">ติดต่อเรา</a>|
-          <a href="{% url 'allproduct-page' %}">สินค้าทั้งหมด</a>| <!-- EP6 -->
-          <a href="{% url 'addproduct-page' %}">เพิ่มสินค้า</a> <!-- EP6 -->
+          <a href="{% url 'allproduct-page' %}">สินค้าทั้งหมด</a> <!-- EP6 -->
+
+          {% if user.is_authenticated %} <!-- EP8 ถ้าเป็นสมาชิกจะให้เห็นเพิ่มสินค้า -->
+            |<a href="{% url 'addproduct-page' %}">เพิ่มสินค้า</a> <!-- EP6 -->
+          {% else %} <!-- EP8 ถ้าไม่สมัครสมาชิกจะไม่ให้เห็นเพิ่มสินค้า -->
+            |<a href="{% url 'register-page' %}">สมัครสมาชิก</a> <!-- EP6 -->
+          {% endif %}
 
       </h3> 
     </div>

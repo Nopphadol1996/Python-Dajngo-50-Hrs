@@ -3,6 +3,7 @@
 
 {% block content %}
 
+<!--EP8 หน้าสมัครสมาชิก-->
 <div class="container" style="margin-bottom: 100px;">
 
 <h2>สมัครสมาชิก</h2>
@@ -11,11 +12,10 @@
 	<form method="POST">
 	 	{% csrf_token %} <!-- ระบบความปลอดภัยของ Django	-->
 
-			<div class="form-group">
-				<label for="first_name">ชื่อ:</label>
-				<input type="text" class="form-control" id="first_name" name="first_name">
-			</div>
-
+		<div class="form-group">
+			<label for="first_name">ชื่อ:</label>
+			<input type="text" class="form-control" id="first_name" name="first_name">
+		</div>
 
 		<div class="form-group">
 			<label for="last_name">นามสกุล:</label>

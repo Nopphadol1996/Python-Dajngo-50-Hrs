@@ -2,12 +2,13 @@
 
 
 {% block content %}
-<div class="container">
+<div class="container" style="margin-bottom: 100px;">
 
 <h2>เพิ่มสินค้าในระบบ</h2>
   <p>คุณสามารถเพิ่มสินค้าเพิ่มเข้าไปในระบบได้ (เฉพาะแอดมิน)</p>
+  <!-- EP8 ถ้ามีการ upload file ต้องใส่ enctype="multipart/form-data/form-data" ด้วย-->
 
-  <form method="POST">
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
   <!-- <form method="POST">  {% csrf_token %} 
     เป็นแกรมม่าของ Django  EP5 จร้า...-->
@@ -32,10 +33,25 @@
       <input type="text" class="form-control" id="imageurl" name="imageurl">
     </div>
 
+    <!-- EP8  -->
+    <div class="form-group">
+      <label for="quantity">จำนวนสินค้า</label>
+      <input type="text" class="form-control" id="quantity" name="quantity">
+    </div>
+
+    <div class="form-group">
+      <label for="unit">หน่วยสินค้า</label>
+      <input type="text" class="form-control" id="unit" name="unit">
+    </div>
+
+    <div class="form-group">
+      <label for="imageupload">เลือกรูปจากเครื่อง</label>
+      <input type="file" class="form-control" id="imageupload" name="imageupload">
+    </div>
+
+
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
-
-
 
 </div>
 

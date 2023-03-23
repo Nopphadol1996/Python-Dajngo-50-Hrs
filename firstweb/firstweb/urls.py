@@ -11,12 +11,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns # EP7 ทำ
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('myapp.urls')), # บรรทัดนี้เป็นการทำให้โปรเจคลิงค์กับ urls ของแอพ
+    path('',include('myapp.urls')) # บรรทัดนี้เป็นการทำให้โปรเจคลิงค์กับ urls ของแอพ
 ]
-
-# EP7 สร้าง field ใส่Photo และ ต้องอยู่หลัง urlpatterns = [ ]
-#urlpatterns += staticfiles_urlpatterns()
-#urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # ต้องอยู่ด้านล่าง  urlpatterns = []
 urlpatterns += staticfiles_urlpatterns() # EP7 ทำ upload image form
