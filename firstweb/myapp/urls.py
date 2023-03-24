@@ -10,5 +10,7 @@ urlpatterns = [
     path('addproduct/',Addproduct, name='addproduct-page'), #EP5
     path('allproduct/',Product, name='allproduct-page'), #EP6
     path('register/',Register, name='register-page'),#EP8 ทำ Register>> localhost:8000/register
+    path('addtocart/<int:pid>/',AddtoCart,name='addtocart-page'),# EP10 ทำ ตะกร้าสินค้า
+    path('mycart/',MyCart,name='mycart-page'),# EP10
 
 ]

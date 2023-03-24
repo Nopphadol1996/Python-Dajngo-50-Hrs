@@ -6,14 +6,16 @@ from .models import * # EP5 import *  คือไม่ต้องพิมพ
 from django.core.files.storage import FileSystemStorage # EP8
 from django.contrib.auth.models import User  # EP8 ทำหน้าสมัครสมาชิก
 from django.contrib.auth import authenticate ,login # EP9 Login Auto
+
 def Home(request):
 	# return HttpResponse('สวัสดีชาวโลก...')
-	product1 = 'แอปเปิ้ล'
-	product2 = 'องุ่น'
-	product3 = 'ส้ม'
+	product = Allproduct.objects.all().order_by('id').reverse()[:3]
+	# EP10 quantity__lte =0 (หาที่ quantity <=0)    (underscore 2 ตัว)
+	# EP10 quantity__gt = 0 (หาที่ quantity > 0)
+	# EP10 quantity__gte = 5 (หาที่ quantity >= 0)
+	preorder = Allproduct.objects.filter(quantity__lte=0) # EP10 quantity__lte
+	context = {'product':product,'preorder':preorder}
 
-	context = {'product1':product1,'product2':product2,'product3':product3}
-	
 	return render(request,'myapp/home.html',context)
 
 def About(request):
@@ -36,8 +38,7 @@ def Addproduct(request):
 	# EP9 redirect ถ้าไม่ใช่ admin ให้กลับไปที่หน้า home-page
 	if request.user.profile.usertype != 'admin':
 		return redirect('home-page')
-
-
+		
 	# EP8  import FileSystemStorage เพื่อทำ Upload ข้อมูลจากเครื่อง
 	if request.method == 'POST' and request.FILES['imageupload']:
 		data = request.POST.copy()
@@ -107,6 +108,37 @@ def Register(request):
 		user = authenticate(username=email,password=password)
 		login(request,user)
 
-
 	return render(request,'myapp/register.html')
+
+#EP10 ตะกร้าสินค้า
+def AddtoCart(request,pid):
+	# localhost:8000/addtocart/3    3 คือ pid
+	# {% url 'addtocart-page' pd.id %}
+	print('CRUENT USER',request.user)
+	username = request.user.username
+	user = User.objects.get(username=username)
+	check = Allproduct.objects.get(id=pid) # เช็คประเภทของสินค้า
+
+	newcart = Cart()
+	newcart.user = user
+	newcart.productid = pid
+	newcart.productname = check.name
+	newcart.price = int(check.price) # ใน model เป็น Char ใน All product
+	newcart.quantity = 1
+	calculate = int(check.price) * 1
+	newcart.total = calculate
+	newcart.save()
+
+	return redirect('allproduct-page')
+
+# EP10 ฟังก์ชั่นหน้า mycart
+def MyCart(request):
+	username = request.user.username
+	user = User.objects.get(username=username)
+	mycart = Cart.objects.filter(user=user)
+	context = {'mycart':mycart}
+
+	return render(request,'myapp/mycart.html',context)
+
+
 

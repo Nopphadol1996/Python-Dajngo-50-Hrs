@@ -40,7 +40,14 @@
 
                 <!-- EP7 ตรวจสอบเงื่อนไข ถ้ามีสินค้าให้แสดงรายการสั่งซื้อ ถ้าไม่มีให้แสดงปุ่มสินค้าหมด -->
                 {% if pd.instock == True %}
-                  <a href="#" class="btn btn-success">สั่งซื้อ</a> 
+
+                  {% if user.is_authenticated %}
+                  <!-- EP10  pd.id คือต้องการ id ไปใส่ใน url -->
+                      <a href="{% url 'addtocart-page' pd.id %}" class="btn btn-success">สั่งซื้อ</a> 
+                  {% else %}
+                      <a href="{% url 'login' %}" class="btn btn-success">สั่งซื้อ</a>
+
+                    {% endif %}        
                 {% else %}
                   <a href="#" class="btn btn-warning">สินค้าหมดแล้ว</a> 
                 {% endif %}

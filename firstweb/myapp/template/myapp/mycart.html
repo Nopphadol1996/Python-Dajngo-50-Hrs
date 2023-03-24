@@ -1,0 +1,15 @@
+{% extends 'myapp/base.html' %}
+<!-- EP6 ทำ block content กับหน้า base.html -->
+
+{% block content %}
+
+<div class="container">
+  <h3>ตะกร้าสินค้าของฉัน</h3>
+  
+    {% for pd in mycart %}
+      <p>{{pd.stamp}} |{{pd.productid}} | {{pd.price}} | {{pd.quantity}} | {{pd.total}}</p>
+      <hr>
+    {% endfor %}
+</div>
+
+{% endblock content %}

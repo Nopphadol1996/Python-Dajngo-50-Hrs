@@ -27,10 +27,20 @@ class Allproduct(models.Model): # EP4
 	unit = models.CharField(max_length=200,default='-') # หน่วยสินค้า ถ้า user ไม่กรอกจะกำหนดค่า default
 	image = models.ImageField(upload_to="products",null=True,blank=True)# EP7 สร้าง field ใส่Photo 
 	
-
-
 	# EP4 ทำให้เบื้องหลังเห็นชื่อ
 	def __str__(self):
 		return self.name
 
+# EP10 ทำตระกร้าสินค้า
+class Cart(models.Model):
+	user = models.ForeignKey(User,on_delete=models.CASCADE)
+	productid = models.CharField(max_length=100)
+	productname = models.CharField(max_length=100)
+	price = models.IntegerField()
+	quantity = models.IntegerField()
+	total = models.IntegerField()
+	stamp = models.DateTimeField(auto_now_add=True,blank=True,null=True)
 
+	def __str__(self):
+		
+		return self.productname
