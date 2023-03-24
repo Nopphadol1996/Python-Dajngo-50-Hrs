@@ -124,3 +124,8 @@ STATIC_URL = '/static/'
 # และอย่าลืมติดตั้ง pip install pillow (venv) D:\leaning\Dajngo\firstweb>pip install pillow
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+#EP9 ทำหน้าล็อกอิน
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home-page' # เมื่อ user login จะให้ไปหน้าไหน
+LOGOUT_REDIRECT_URL = 'login' # เมื่อ user logout จะให้ไปหน้าไหน

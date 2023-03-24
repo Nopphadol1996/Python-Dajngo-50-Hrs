@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect #EP9 redirect
 from django.http import HttpResponse
 # django คือ แพ็คเกจ หลัก .http คือ แพ็คเกจย่อย  HttpResponse คือฟังก์ชั่นที่ทำให้โชว์ข้อความหน้าเว็บได้
-from .models import * # EP5
+# from .models import Allproduct,Profile # EP9 Profile
+from .models import * # EP5 import *  คือไม่ต้องพิมพ์ Allproduct,Profile
 from django.core.files.storage import FileSystemStorage # EP8
 from django.contrib.auth.models import User  # EP8 ทำหน้าสมัครสมาชิก
+from django.contrib.auth import authenticate ,login # EP9 Login Auto
 def Home(request):
 	# return HttpResponse('สวัสดีชาวโลก...')
 	product1 = 'แอปเปิ้ล'
@@ -28,7 +30,14 @@ def Apple(request):
 
 # EP5
 # from .models import Allproduct
+# from django.shortcuts import render,redirect #EP9 redirect
 def Addproduct(request):
+
+	# EP9 redirect ถ้าไม่ใช่ admin ให้กลับไปที่หน้า home-page
+	if request.user.profile.usertype != 'admin':
+		return redirect('home-page')
+
+
 	# EP8  import FileSystemStorage เพื่อทำ Upload ข้อมูลจากเครื่อง
 	if request.method == 'POST' and request.FILES['imageupload']:
 		data = request.POST.copy()
@@ -89,6 +98,15 @@ def Register(request):
 		newuser.set_password(password)
 		newuser.save()
 
-	return render(request,'myapp/register.html')
+		# EP9 AUtoLogin
+		# from .models import Allproduct,Profile # import  Profile ด้วย
+		profile = Profile()
+		profile.user = User.objects.get(username=email)
+		profile.save()
+		# from django.contrib.auth import authenticate ,login # EP9 Login Auto
+		user = authenticate(username=email,password=password)
+		login(request,user)
 
+
+	return render(request,'myapp/register.html')
 
