@@ -115,7 +115,7 @@ def Register(request):
 def AddtoCart(request,pid):
 	# localhost:8000/addtocart/3    3 คือ pid
 	# {% url 'addtocart-page' pd.id %}
-	print('CRUENT USER',request.user)
+	# print('CRUENT USER',request.user)
 	username = request.user.username
 	user = User.objects.get(username=username)
 	check = Allproduct.objects.get(id=pid) # เช็คประเภทของสินค้า
@@ -123,7 +123,7 @@ def AddtoCart(request,pid):
 	# EP11 ถ้าซื้อสินค้าชนิดเดียวกันจะให้รวมกัน
 	try:
 		# กรณีสินค้ามีซ้ำ
-		newcart = Cart.objects.get(user=user,productid=str(pid))
+		newcart = Cart.objects.get(user=user,productid=pid)
 		#print('EXISTS:',pcheck.exists())
 		newquan = newcart.quantity + 1
 		newcart.quantity = newquan
@@ -154,7 +154,7 @@ def AddtoCart(request,pid):
 		newcart.save()
 
 		# Update จำนวนของตะกร้าสินค้า ณ ตอนนี้
-		#EP10 ไปสร้าง cartquan = models.IntegerField(default=0) # ใช้เก็บจำนวนสินค้าในตะกร้าว่ามีกี่ชิ้น
+		#EP11 ไปสร้าง cartquan = models.IntegerField(default=0) # ใช้เก็บจำนวนสินค้าในตะกร้าว่ามีกี่ชิ้น
 		count = Cart.objects.filter(user=user)
 		count = sum([ c.quantity for c in count]) # สั่ง sum forloop แบบบรรทัดเดียว
 		updatequan = Profile.objects.get(user=user) # Update databaseของ profile
@@ -191,9 +191,72 @@ def MyCart(request):
 
 	#EP10
 	mycart = Cart.objects.filter(user=user)
+
+	count = sum([ c.quantity for c in mycart]) # EP12 sum qualtity เพื่อไปแสดงผลรวม
+	total = sum([ c.total for c in mycart]) # EP12 sum total เพื่อไปแสดงผลรวม
+
 	context['mycart'] = mycart #EP11 ทำ Alert
+	context['count'] = count # EP12 แนบ context ไปหน้า html แสดงจำนวน
+	context['total'] = total # EP12 แนบ context ไปหน้า html แสดงราคา
 
 	return render(request,'myapp/mycart.html',context)
+
+# EP12  mycart_EDIT ไปสร้างหน้า hrml ด้วย
+def MyCartEdit(request):
+	# EP11
+	username = request.user.username # เช็คว่า userไหนล็อกอิน
+	user = User.objects.get(username=username)
+	#EP11 ทำ alert
+	context = {}
+
+	#EP12 แก้ไขจำนวนสินค้า
+	if request.method == 'POST':
+		data = request.POST.copy()
+		#print(data) # ข้อมูลที่ได้มาเป็น qureydic
+
+		### EP12 จะทำการลบสินค้าในหน้าแก้ไข
+		if data.get('clear') == 'clear':
+			# print(data.get('clear'))
+			Cart.objects.filter(user=user).delete()
+			# update profile
+			updatequan = Profile.objects.get(user=user)
+			updatequan.cartquan = 0 
+			updatequan.save()
+			return redirect('mycart-page')
+
+		# EP12 แก้ไขจำนวนสินค้า
+		editlist = []
+		for k ,v in data.items(): # k = key  v = value
+			# print([k,v])
+			# <td><input type="text" name="pd_{{pd.productid}}" value="{{pd.quantity}}"></td>
+			if k[:2] == 'pd':  #pd มาจาก name  ,,,  เช็คว่า k[:2] น้อยกว่า2 ใช่ pd หรือเปล่า
+				pid = int(k.split('_')[1]) # ตัดคำที่ _ [1] คือเลือกตัวสุดท้าย
+				dt = [pid,int(v)]
+				editlist.append(dt)
+		print('EDITLIST: ',editlist) #[[9,10],[7,8]] 9 = productid ,10 =quantity
+
+		for ed in editlist:
+			# print('productid= ',ed[0])
+			# print('quan= ',ed[1])
+			edit = Cart.objects.get(productid=ed[0],user=user)
+		# productid ,,, user=user คือเฉพาะแค่ userนั้นที่ทำการสั่งซื้อ ถ้าไม่ไส่ ,user=user จะลบทุก user ที่ซื้อชิ้นเดียวกัน
+			edit.quantity = ed[1] #quantity ใหม่ ที่จะไป update
+			calculate = edit.price * ed[1] # คำนวนราคาใหม่เมื่อมีการเปลี่ยนข้อมูล
+			edit.total = calculate
+			edit.save()
+
+		# update profile
+		count = Cart.objects.filter(user=user)
+		count = sum([ c.quantity for c in count])
+		updatequan = Profile.objects.get(user=user)
+		updatequan.cartquan = count
+		updatequan.save()
+		return redirect('mycart-page')
+
+	mycart = Cart.objects.filter(user=user)
+	context['mycart'] = mycart #EP11 ทำ Alert
+
+	return render(request,'myapp/mycartedit.html',context)
 
 
 

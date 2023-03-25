@@ -1,0 +1,64 @@
+{% extends 'myapp/base.html' %}
+<!-- EP6 ทำ block content กับหน้า base.html -->
+
+{% block content %}
+<!-- EP12 ทำหน้า EDIT สินค้า -->
+
+{% load humanize %} <!--EP12 จะทำใส่คอมม่าทุกๆสามหลัก -->
+
+
+{% if status == 'delete' %}
+  <div class="alert alert-danger">
+      <strong>ลบสินค้าเรียบร้อบแล้ว!</strong> หากต้องการสินค้าเพิ่ม กรุณากดสั่งซื้อใหม่
+  </div>
+{% endif %}
+
+<div class="container">
+  <h2>แก้ไขข้อมูลในตะกร้า</h2>
+  <p>แก้ไขข้อมูลในตะกร้าสินค้าของฉัน</p>
+
+  <form method="POST" id="formsave">
+  {% csrf_token %}         
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>รหัส</th>
+        <th>สินค้า</th>
+        <th>ราคา</th>
+        <th>จำนวน</th>
+        <th>ลบ</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pd in mycart %}
+      <tr>
+        <td>{{pd.productid}}</td>
+        <td>{{pd.productname}}</td>
+        <td>{{pd.price|intcomma}}</td>
+        <td><input type="text" name="pd_{{pd.productid}}" value="{{pd.quantity}}"></td>
+
+        <th>
+          -
+        </th>
+      </tr>        
+      {% endfor %}
+    </tbody>
+  </table>
+            <input type="hidden" name="checksave" value="checksave">
+            
+</form>
+
+  <!-- -->
+   <div class="row">
+    <button type="submit" form="formsave" class="btn btn-danger" >บันทึก</button>
+    <div style="padding: 10px;"></div>
+      <form id="formclear" method="POST" onsubmit="return confirm('ยืนยันการลยใช่หรือไม่ ?');" >
+        {% csrf_token %}
+        <input type="hidden" name="clear" value="clear">
+        <button type="submit" form="formclear" class="btn btn-danger" >ลบสินค้าในตระกร้าทั้งหมด</button>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

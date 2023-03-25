@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize', # EP12 จะทำใส่คอมม่าทุกๆสามหลัก
 ]
 
 MIDDLEWARE = [

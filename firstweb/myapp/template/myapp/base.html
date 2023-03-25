@@ -40,23 +40,6 @@
               >สินค้าทั้งหมด</a
             >
           </li>
-          {% if user.is_authenticated and user.profile.usertype == 'member' %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'mycart-page' %}"
-              >รายการสั่งซื้อ <span class="badge badge-warning">{{user.profile.cartquan}}</span></a
-            >
-          </li>
-          {% endif %}
-          <li class="nav-item">
-            <!-- EP9 ถ้าเป็นaddminให้เห็นเพิ่มสินค้า -->
-            {% if user.is_authenticated and user.profile.usertype == 'admin' %}
-            <!-- EP8 ถ้าเป็นสมาชิกจะให้เห็นเพิ่มสินค้า -->
-            <a class="nav-link" href="{% url 'addproduct-page' %}"
-              >เพิ่มสินค้า</a
-            >
-            <!-- EP6 -->
-            {% endif %}
-          </li>
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -73,6 +56,25 @@
               <a class="dropdown-item" href="#">สินค้านำเข้าจากอเมริกา</a>
             </div>
           </li>
+
+          {% if user.is_authenticated and user.profile.usertype == 'member' %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'mycart-page' %}"
+              >ตระกร้า <span class="badge badge-warning">{{user.profile.cartquan}}</span></a
+            >
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <!-- EP9 ถ้าเป็นaddminให้เห็นเพิ่มสินค้า -->
+            {% if user.is_authenticated and user.profile.usertype == 'admin' %}
+            <!-- EP8 ถ้าเป็นสมาชิกจะให้เห็นเพิ่มสินค้า -->
+            <a class="nav-link" href="{% url 'addproduct-page' %}"
+              >เพิ่มสินค้า</a
+            >
+            <!-- EP6 -->
+            {% endif %}
+          </li>
+          
         </ul>
 
         <!-- EP9 ทำProfile usertyep --> 

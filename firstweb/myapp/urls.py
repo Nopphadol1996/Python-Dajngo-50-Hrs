@@ -12,5 +12,6 @@ urlpatterns = [
     path('register/',Register, name='register-page'),#EP8 ทำ Register>> localhost:8000/register
     path('addtocart/<int:pid>/',AddtoCart,name='addtocart-page'),# EP10 ทำ ตะกร้าสินค้า
     path('mycart/',MyCart,name='mycart-page'),# EP10
+    path('mycart/edit/',MyCartEdit,name='mycartedit-page'),# EP11 แก้ไขข้อมูลใน Mycart
 
 ]
