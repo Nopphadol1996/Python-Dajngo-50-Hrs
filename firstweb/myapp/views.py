@@ -12,7 +12,7 @@ def Home(request):
 	product = Allproduct.objects.all().order_by('id').reverse()[:3]
 	# EP10 quantity__lte =0 (หาที่ quantity <=0)    (underscore 2 ตัว)
 	# EP10 quantity__gt = 0 (หาที่ quantity > 0)
-	# EP10 quantity__gte = 5 (หาที่ quantity >= 0)
+	# EP10 quantity__gte = 5 (หาที่ quantity >= )
 	preorder = Allproduct.objects.filter(quantity__lte=0) # EP10 quantity__lte
 	context = {'product':product,'preorder':preorder}
 
@@ -75,6 +75,7 @@ def Addproduct(request):
 
 # EP6
 def Product(request):
+
 	# product = Allproduct.objects.all() #EP6 ดึงข้อมูลมาจาก Models .objects.all ดึงข้อมูลมาทั้งหมด
 	product = Allproduct.objects.all().order_by('id').reverse() # EP7  ดึงข้อมูลล่าสุดไว้ด้านบน
 	context = {'product':product}
@@ -119,24 +120,78 @@ def AddtoCart(request,pid):
 	user = User.objects.get(username=username)
 	check = Allproduct.objects.get(id=pid) # เช็คประเภทของสินค้า
 
-	newcart = Cart()
-	newcart.user = user
-	newcart.productid = pid
-	newcart.productname = check.name
-	newcart.price = int(check.price) # ใน model เป็น Char ใน All product
-	newcart.quantity = 1
-	calculate = int(check.price) * 1
-	newcart.total = calculate
-	newcart.save()
+	# EP11 ถ้าซื้อสินค้าชนิดเดียวกันจะให้รวมกัน
+	try:
+		# กรณีสินค้ามีซ้ำ
+		newcart = Cart.objects.get(user=user,productid=str(pid))
+		#print('EXISTS:',pcheck.exists())
+		newquan = newcart.quantity + 1
+		newcart.quantity = newquan
+		calculate = int(check.price) * newquan
+		newcart.total = calculate
+		newcart.save()
 
-	return redirect('allproduct-page')
+		# Update จำนวนของตะกร้าสินค้า ณ ตอนนี้
+		#EP10 ไปสร้าง cartquan = models.IntegerField(default=0) # ใช้เก็บจำนวนสินค้าในตะกร้าว่ามีกี่ชิ้น
+		count = Cart.objects.filter(user=user)
+		count = sum([ c.quantity for c in count]) # สั่ง sum forloop แบบบรรทัดเดียว
+		updatequan = Profile.objects.get(user=user) # Update databaseของ profile
+		updatequan.cartquan = count
+		updatequan.save()
+
+		return redirect('allproduct-page')
+
+	except:
+		#EP10 ทำตะกร้าสินค้า
+		newcart = Cart()
+		newcart.user = user
+		newcart.productid = pid
+		newcart.productname = check.name
+		newcart.price = int(check.price) # ใน model เป็น Char ใน All product
+		newcart.quantity = 1
+		calculate = int(check.price) * 1
+		newcart.total = calculate
+		newcart.save()
+
+		# Update จำนวนของตะกร้าสินค้า ณ ตอนนี้
+		#EP10 ไปสร้าง cartquan = models.IntegerField(default=0) # ใช้เก็บจำนวนสินค้าในตะกร้าว่ามีกี่ชิ้น
+		count = Cart.objects.filter(user=user)
+		count = sum([ c.quantity for c in count]) # สั่ง sum forloop แบบบรรทัดเดียว
+		updatequan = Profile.objects.get(user=user) # Update databaseของ profile
+		updatequan.cartquan = count
+		updatequan.save()
+
+		return redirect('allproduct-page')
 
 # EP10 ฟังก์ชั่นหน้า mycart
 def MyCart(request):
+	#EP10
 	username = request.user.username
 	user = User.objects.get(username=username)
+
+	#EP11 ทำ alert
+	context = {}
+
+	#EP11 ใช้ สำหรับการลบเท่านั้น
+	if request.method == 'POST':
+		data = request.POST.copy()
+		productid = data.get('productid')
+		item = Cart.objects.get(user=user,productid=productid)
+		item.delete()
+		#EP11 ทำ Alert
+		context['status'] = 'delete' #EP11 ทำ Alert
+
+		# EP11 Update จำนวนของตะกร้าสินค้า ณ ตอนนี้ เมื่อทำการลบแล้ว
+
+		count = Cart.objects.filter(user=user)
+		count = sum([ c.quantity for c in count]) # สั่ง sum forloop แบบบรรทัดเดียว
+		updatequan = Profile.objects.get(user=user) # Update databaseของ profile
+		updatequan.cartquan = count
+		updatequan.save()
+
+	#EP10
 	mycart = Cart.objects.filter(user=user)
-	context = {'mycart':mycart}
+	context['mycart'] = mycart #EP11 ทำ Alert
 
 	return render(request,'myapp/mycart.html',context)
 

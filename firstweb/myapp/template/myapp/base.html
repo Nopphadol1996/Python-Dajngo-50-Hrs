@@ -43,7 +43,7 @@
           {% if user.is_authenticated and user.profile.usertype == 'member' %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'mycart-page' %}"
-              >รายการสั่งซื้อ</a
+              >รายการสั่งซื้อ <span class="badge badge-warning">{{user.profile.cartquan}}</span></a
             >
           </li>
           {% endif %}

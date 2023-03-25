@@ -6,6 +6,8 @@ class Profile(models.Model):
 	user = models.OneToOneField(User,on_delete=models.CASCADE)
 	photo = models.ImageField(upload_to="photoprofile",null=True,blank=True,default='defaultprofile.png')
 	usertype = models.CharField(max_length=100,default='member')
+	#EP11 
+	cartquan = models.IntegerField(default=0) # ใช้เก็บจำนวนสินค้าในตะกร้าว่ามีกี่ชิ้น
 
 	def __str__(self):
 		return self.user.first_name
@@ -40,7 +42,3 @@ class Cart(models.Model):
 	quantity = models.IntegerField()
 	total = models.IntegerField()
 	stamp = models.DateTimeField(auto_now_add=True,blank=True,null=True)
-
-	def __str__(self):
-		
-		return self.productname

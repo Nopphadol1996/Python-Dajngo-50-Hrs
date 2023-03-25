@@ -2,14 +2,57 @@
 <!-- EP6 ทำ block content กับหน้า base.html -->
 
 {% block content %}
+<!-- EP11 ตารางแสดงสินค้าของฉัน -->
+
+{% if status == 'delete' %}
+  <div class="alert alert-danger">
+      <strong>ลบสินค้าเรียบร้อบแล้ว!</strong> หากต้องการสินค้าเพิ่ม กรุณากดสั่งซื้อใหม่
+  </div>
+{% endif %}
 
 <div class="container">
-  <h3>ตะกร้าสินค้าของฉัน</h3>
-  
-    {% for pd in mycart %}
-      <p>{{pd.stamp}} |{{pd.productid}} | {{pd.price}} | {{pd.quantity}} | {{pd.total}}</p>
-      <hr>
-    {% endfor %}
+  <h2>ตะกร้าสินค้าของฉัน</h2>
+  <p>สินค้าทั้งหมดของลูกค้าที่อยู่ในตะกร้า พร้อมยืนยันการสั่งซื้อ</p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th>เวลาสั่งซื้อล่าสุด</th>
+        <th>รหัส</th>
+        <th>สินค้า</th>
+        <th>ราคา</th>
+        <th>จำนวน</th>
+        <th>รวมยอด</th>
+        <th>ลบ</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pd in mycart %}
+      <tr>
+        <td>{{pd.stamp}}</td>
+        <td>{{pd.productid}}</td>
+        <td>{{pd.productname}}</td>
+        <td>{{pd.price}}</td>
+        <td>{{pd.quantity}}</td>
+        <td>{{pd.total}}</td>
+
+        <th>
+          <form method="POST" id="form{{pd.productid}}" onsubmit="return confirm('ยืนยันการลยใช่หรือไม่ ?'); ">
+            {% csrf_token %}
+            <input type="hidden" name="productid" value="{{pd.productid}}">
+            <button class="btn btn-danger" > ลบ </button>
+          </form>
+        </th>
+      </tr>        
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
+
+
+
+
+
+
+
 
 {% endblock content %}
