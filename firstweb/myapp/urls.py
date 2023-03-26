@@ -13,5 +13,6 @@ urlpatterns = [
     path('addtocart/<int:pid>/',AddtoCart,name='addtocart-page'),# EP10 ทำ ตะกร้าสินค้า
     path('mycart/',MyCart,name='mycart-page'),# EP10
     path('mycart/edit/',MyCartEdit,name='mycartedit-page'),# EP11 แก้ไขข้อมูลใน Mycart
+    path('checkout/',Checkout,name='checkout-page'), #EP13 Checkout
 
 ]

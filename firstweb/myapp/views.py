@@ -258,5 +258,48 @@ def MyCartEdit(request):
 
 	return render(request,'myapp/mycartedit.html',context)
 
+#EP13 ทำเช็ค CHECKOUT
+def Checkout(request):
+	username = request.user.username
+	user = User.objects.get(username=username)
+
+	if request.method == 'POST':
+		data = request.POST.copy()
+		name = data.get('name')
+		tel = data.get('tel')
+		address = data.get('address')
+		shipping = data.get('shipping')
+		payment = data.get('payment')
+		other = data.get('other')
+		page = data.get('page')
+
+		#ส่งข้อมูลไปยัง checkout2 เพื่อกรอกข้อมูลการจัดส่ง 
+		if page == 'information': # ถ้ามีการกดปุ่ม Next ส่งข้อมูลไปยัง checkout2
+			context = {}
+			context['name'] = name
+			context['tel'] = tel
+			context['address'] = address
+			context['shipping'] = shipping
+			context['payment'] = payment
+			context['other'] = other
+
+			# ดึงข้อมูลจาก database มา show ใน table ว่าสินค้ามีอะไรบ้างลูกค้าสั่ง หน้า checkout2
+			mycart = Cart.objects.filter(user=user) 
+			count = sum([ c.quantity for c in mycart]) # EP12 sum qualtity เพื่อไปแสดงผลรวม
+			total = sum([ c.total for c in mycart]) # EP12 sum total เพื่อไปแสดงผลรวม
+
+			context['mycart'] = mycart #EP11 ทำ Alert
+			context['count'] = count # EP12 แนบ context ไปหน้า html แสดงจำนวน
+			context['total'] = total # EP12 แนบ context ไปหน้า html แสดงราคา
+
+
+			return render(request, 'myapp/checkout2.html',context)
+
+		if page == 'confirm':
+			print('Confirm')
+			print(data)
+						
+
+	return render(request, 'myapp/checkout1.html')
 
 

@@ -50,15 +50,15 @@
 </form>
 
   <!-- -->
-   <div class="row">
-    <button type="submit" form="formsave" class="btn btn-danger" >บันทึก</button>
-    <div style="padding: 10px;"></div>
-      <form id="formclear" method="POST" onsubmit="return confirm('ยืนยันการลยใช่หรือไม่ ?');" >
-        {% csrf_token %}
-        <input type="hidden" name="clear" value="clear">
-        <button type="submit" form="formclear" class="btn btn-danger" >ลบสินค้าในตระกร้าทั้งหมด</button>
-    </form>
-  </div>
+     <div class="row">
+            <button type="submit" form="formsave" class="btn btn-danger" >บันทึก</button>
+            <div style="padding: 10px;"></div>
+          <form id="formclear" method="POST" onsubmit="return confirm('ยืนยันการลยใช่หรือไม่ ?');" >
+              {% csrf_token %}
+              <input type="hidden" name="clear" value="clear">
+              <button type="submit" form="formclear" class="btn btn-danger" >ลบสินค้าในตระกร้าทั้งหมด</button>
+          </form>
+      </div>
 </div>
 
 {% endblock content %}
