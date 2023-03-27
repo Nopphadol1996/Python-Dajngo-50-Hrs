@@ -4,3 +4,5 @@ from .models import*
 admin.site.register(Allproduct)
 admin.site.register(Profile) #EP9 สร้าง Userprofile
 admin.site.register(Cart)
+admin.site.register(OrderList)
+admin.site.register(OrderPending)

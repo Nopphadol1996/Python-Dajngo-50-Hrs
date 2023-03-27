@@ -67,8 +67,8 @@
 </div>
 
 <form method="POST">
-
-    {% csrf_token %}
+  {% csrf_token %}
+  
   <input type="hidden" id = "name" name="name" value="{{name}}">
   <input type="hidden" id = "tel" name="tel" value="{{tel}}">
   <input type="hidden" id = "address" name="address" value="{{address}}">

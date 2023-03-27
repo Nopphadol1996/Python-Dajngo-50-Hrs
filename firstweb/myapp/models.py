@@ -42,3 +42,30 @@ class Cart(models.Model):
 	quantity = models.IntegerField()
 	total = models.IntegerField()
 	stamp = models.DateTimeField(auto_now_add=True,blank=True,null=True)
+
+
+# EP14 สร้าง Orderlist
+class OrderList(models.Model):
+	orderid = models.CharField(max_length=100)
+	productid = models.CharField(max_length=100) # productid ณ เวลาตอนนั้น
+	productname = models.CharField(max_length=100)
+	price = models.IntegerField()
+	quantity = models.IntegerField()
+	total = models.IntegerField()
+
+# EP14 สร้าง OrderPending เก็บ รายละเอียดของ orderlist
+class OrderPending(models.Model):
+	orderi = models.CharField(max_length=100)
+	user = models.ForeignKey(User,on_delete=models.CASCADE) # User ไหนเป็นคนสั่ง
+	name = models.CharField(max_length=100) # ชื่อที่อยู่ผู้รับ
+	tel = models.CharField(max_length=100)  # เบอร์ผู้รับ
+	address = models.TextField()
+	shipping = models.CharField(max_length=100) # EMS
+	payment = models.CharField(max_length=100)  # โอนเงิน พร้อมเพย์ , ธนาคารอะไร
+	other = models.TextField() # หมายเหตุของผู้รับ
+	stamp = models.DateTimeField(auto_now_add=True,blank=True,null=True) # ออร์เดอร์ stamp วันไหน
+	paid = models.BooleanField(default=False) # เช็ตสถานะจ่ายเงินแล้วหรือยัง
+	slip = models.ImageField(upload_to="slip",null=True,blank=True) # อัพโหลด slip แล้วหรือยัง
+	paymentid = models.CharField(max_length=100,null=True,blank=True) #เก็บไว้ยังไม่ใช้
+
+

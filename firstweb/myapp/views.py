@@ -6,6 +6,8 @@ from .models import * # EP5 import *  คือไม่ต้องพิมพ
 from django.core.files.storage import FileSystemStorage # EP8
 from django.contrib.auth.models import User  # EP8 ทำหน้าสมัครสมาชิก
 from django.contrib.auth import authenticate ,login # EP9 Login Auto
+from datetime import datetime
+
 
 def Home(request):
 	# return HttpResponse('สวัสดีชาวโลก...')
@@ -206,6 +208,7 @@ def MyCartEdit(request):
 	# EP11
 	username = request.user.username # เช็คว่า userไหนล็อกอิน
 	user = User.objects.get(username=username)
+
 	#EP11 ทำ alert
 	context = {}
 
@@ -292,13 +295,52 @@ def Checkout(request):
 			context['count'] = count # EP12 แนบ context ไปหน้า html แสดงจำนวน
 			context['total'] = total # EP12 แนบ context ไปหน้า html แสดงราคา
 
-
 			return render(request, 'myapp/checkout2.html',context)
-
+		# EP13	
 		if page == 'confirm':
 			print('Confirm')
 			print(data)
-						
+
+			# EP 14 ต่อๆ 
+			mycart = Cart.objects.filter(user=user)
+
+			# id =   Order id ไม่ควรจะเริ่มต้นด้วย 0 เพราะ db บางตัวอาจจะไม่นำมาคิด
+
+			# id = OD0007 202 09 03 22 00 30
+			# id = OD 0230 2020 09 03 22 00 30
+			# from datetime import datetime
+			mid = str(user.id).zfill(4) # zfill คือ การเติม 0 ด้านหน้า ไม่สามารถใช้กับ Integerได้ ต้องแปลงเป็น str ก่อน
+			dt = datetime.now().strftime('%Y%m%d%H%M%S') # ทำหรัสจากวันที่เพื่อจะได้ไม่ให้ซ้ำกัน
+			orderid = 'OD' + mid + dt # รวมกันเป็นรหัสID ที่ไม่ซ้ำกันแน่นอน
+
+			for pd in mycart:	
+				order = OrderList()
+				order.orderid  = orderid # เมื่อได้แล้วไปเก็บลงใน models ของ OrderList
+				order.productid = pd.productid # productid มาจาก Mycart runforloop ให้ไปเก็บใน OrderList
+				order.productname = pd.productid
+				order.price = pd.price
+				order.quantity = pd.quantity
+				order.total = pd.total
+				order.save()
+
+			# EP14 Create OderPinding 
+			# พวก user,name,tel,address,shipping,payment,other มาจาก หน้า html เดียวกันไม่ต้อง get ค่าใหม่
+			odp = OrderPending()
+			odp.orderi = orderid # ต้องเป็น orderid เดียวกัน กับ OrderList เพราะจะได้เป็น ID เดียวกัน
+			odp.user  = user
+			odp.name = name
+			odp.tel = tel
+			odp.address = address
+			odp.shipping = shipping
+			odp.payment = payment
+			odp.other = other
+			odp.save()
+			###### เมื่อ Save เสร็จให้เคลียข้อมูล
+			Cart.objects.filter(user=user).delete()
+			updatequan = Profile.objects.get(user=user)
+			updatequan.cartquan = 0 
+			updatequan.save()
+			return redirect('mycart-page')
 
 	return render(request, 'myapp/checkout1.html')
 
