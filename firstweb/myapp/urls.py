@@ -14,5 +14,7 @@ urlpatterns = [
     path('mycart/',MyCart,name='mycart-page'),# EP10
     path('mycart/edit/',MyCartEdit,name='mycartedit-page'),# EP11 แก้ไขข้อมูลใน Mycart
     path('checkout/',Checkout,name='checkout-page'), #EP13 Checkout
+    path('orderlist/',OrderListPage,name='orderlist-page'),#EP15 OrderList
+     path('allorderlist/',AllOrderListPage,name='allorderlist-page'),#EP15 OrderList สำหรับแอดมินดู
 
 ]

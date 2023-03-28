@@ -55,14 +55,14 @@ class OrderList(models.Model):
 
 # EP14 สร้าง OrderPending เก็บ รายละเอียดของ orderlist
 class OrderPending(models.Model):
-	orderi = models.CharField(max_length=100)
+	orderid = models.CharField(max_length=100)
 	user = models.ForeignKey(User,on_delete=models.CASCADE) # User ไหนเป็นคนสั่ง
 	name = models.CharField(max_length=100) # ชื่อที่อยู่ผู้รับ
 	tel = models.CharField(max_length=100)  # เบอร์ผู้รับ
 	address = models.TextField()
 	shipping = models.CharField(max_length=100) # EMS
 	payment = models.CharField(max_length=100)  # โอนเงิน พร้อมเพย์ , ธนาคารอะไร
-	other = models.TextField() # หมายเหตุของผู้รับ
+	other = models.TextField() # หมายเหตุของผู้รับ ต้องใส่ blank=True ด้วย
 	stamp = models.DateTimeField(auto_now_add=True,blank=True,null=True) # ออร์เดอร์ stamp วันไหน
 	paid = models.BooleanField(default=False) # เช็ตสถานะจ่ายเงินแล้วหรือยัง
 	slip = models.ImageField(upload_to="slip",null=True,blank=True) # อัพโหลด slip แล้วหรือยัง

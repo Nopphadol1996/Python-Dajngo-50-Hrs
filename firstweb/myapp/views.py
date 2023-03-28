@@ -317,7 +317,7 @@ def Checkout(request):
 				order = OrderList()
 				order.orderid  = orderid # เมื่อได้แล้วไปเก็บลงใน models ของ OrderList
 				order.productid = pd.productid # productid มาจาก Mycart runforloop ให้ไปเก็บใน OrderList
-				order.productname = pd.productid
+				order.productname = pd.productname
 				order.price = pd.price
 				order.quantity = pd.quantity
 				order.total = pd.total
@@ -326,7 +326,7 @@ def Checkout(request):
 			# EP14 Create OderPinding 
 			# พวก user,name,tel,address,shipping,payment,other มาจาก หน้า html เดียวกันไม่ต้อง get ค่าใหม่
 			odp = OrderPending()
-			odp.orderi = orderid # ต้องเป็น orderid เดียวกัน กับ OrderList เพราะจะได้เป็น ID เดียวกัน
+			odp.orderid = orderid # ต้องเป็น orderid เดียวกัน กับ OrderList เพราะจะได้เป็น ID เดียวกัน
 			odp.user  = user
 			odp.name = name
 			odp.tel = tel
@@ -345,3 +345,38 @@ def Checkout(request):
 	return render(request, 'myapp/checkout1.html')
 
 
+#EP15 โชว์สถานะของการสั่งซื้อ
+def OrderListPage(request):
+	
+	username = request.user.username
+	user = User.objects.get(username=username)
+	context =  {}
+
+	order  = OrderPending.objects.filter(user=user)  # filter จะใช้กับหลายรายการ
+	for od in order:
+		orderid = od.orderid # ดึงรายการ order ออกมา
+		odlist = OrderList.objects.filter(orderid=orderid)
+		total = sum([ c.total for c in odlist])
+		od.total = total
+
+	context['allorder'] = order # ส่งข้อความแบบ dic  ['allorder'] คือ ชื่อ key
+
+	return render(request, 'myapp/orderlist.html',context)
+
+def AllOrderListPage(request):
+	
+	# username = request.user.username
+	# user = User.objects.get(username=username)
+	# ไม่ใส่เพราะว่าต้องการเห็นทั้งหมด ไม่เจาะจงว่าเป็น User ไหน
+	context =  {}
+
+	order  = OrderPending.objects.all()  # filter จะใช้กับหลายรายการ
+	for od in order:
+		orderid = od.orderid # ดึงรายการ order ออกมา
+		odlist = OrderList.objects.filter(orderid=orderid)
+		total = sum([ c.total for c in odlist])
+		od.total = total
+
+	context['allorder'] = order # ส่งข้อความแบบ dic  ['allorder'] คือ ชื่อ key
+
+	return render(request, 'myapp/allorderlist.html',context)

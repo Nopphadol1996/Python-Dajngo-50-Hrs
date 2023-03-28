@@ -59,21 +59,22 @@
 
           {% if user.is_authenticated and user.profile.usertype == 'member' %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'mycart-page' %}"
-              >ตระกร้า <span class="badge badge-warning">{{user.profile.cartquan}}</span></a
-            >
+          <a class="nav-link" href="{% url 'mycart-page' %}">ตระกร้า <span class="badge badge-warning">{{user.profile.cartquan}}</span></a>   
           </li>
-          {% endif %}
           <li class="nav-item">
-            <!-- EP9 ถ้าเป็นaddminให้เห็นเพิ่มสินค้า -->
-            {% if user.is_authenticated and user.profile.usertype == 'admin' %}
-            <!-- EP8 ถ้าเป็นสมาชิกจะให้เห็นเพิ่มสินค้า -->
-            <a class="nav-link" href="{% url 'addproduct-page' %}"
-              >เพิ่มสินค้า</a
-            >
-            <!-- EP6 -->
-            {% endif %}
+            <a class="nav-link" href="{% url 'orderlist-page' %}">รายการสั่งซื้อ<span class="badge badge-warning"></span></a>   
           </li>
+          <
+         {% endif %}
+         <!-- EP9 ถ้าเป็นaddminให้เห็นเพิ่มสินค้า -->
+         {% if user.is_authenticated and user.profile.usertype == 'admin' %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'addproduct-page' %}">เพิ่มสินค้า</a></li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'allorderlist-page' %}">รายการสั่งซื้อทั้งหมด<span class="badge badge-warning"></span></a>   
+          </li>
+
+            {% endif %}
+          
           
         </ul>
 
