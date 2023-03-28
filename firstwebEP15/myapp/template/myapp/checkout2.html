@@ -1,0 +1,85 @@
+{% extends 'myapp/base.html' %}
+<!-- EP6 ทำ block content กับหน้า base.html -->
+{% load humanize %} <!--EP12 จะทำใส่คอมม่าทุกๆสามหลัก -->
+<!--EP13 checkout2 -->
+{% block content %}
+<div class="container">
+  <h3>ข้อมูลการจัดส่ง</h3>
+    <p>ชื่อผู้รับ: {{name}} <br>
+      เบอร์โทร: {{tel}} <br>
+      ที่อยู่จัดส่ง: {{address}} <br>
+      {% if shipping == 'ems' %}
+          รูปแบบการจัดส่ง: EMS
+      {% else %}
+          รูปแบบการจัดส่ง: ลงทะเบียน
+
+      {% endif %}<br>
+
+      {% if payment == 'transfer' %}
+          ชำระผ่าร: โอนเงินเข้าบัญชีธนาคาร
+      {% else %}
+          รูปแบบการจัดส่ง: เก็บเงินปลายทาง
+
+      {% endif %}<br>
+      หมายเหตุ: {{other}}<br>
+
+    </p>
+</div>
+
+<div class="container">
+  <h2>สินค้าทั้งหมด</h2>
+  <p>รายการสินค้าที่สั่งซื้อ</p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th>รหัส</th>
+        <th>สินค้า</th>
+        <th>ราคา</th>
+        <th>จำนวน</th>
+        <th>รวมยอด</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for pd in mycart %}
+      <tr>
+        <td>{{pd.productid}}</td>
+        <td>{{pd.productname}}</td>
+        <td>{{pd.price|intcomma}}</td>
+        <td>{{pd.quantity|intcomma}}</td>
+        <td>{{pd.total|intcomma}}</td>
+        
+      </tr>        
+      {% endfor %}
+
+      <tr>
+
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td></td>
+        <td><h4>{{count|intcomma}}</h4></td>
+        <td><h4>{{total|intcomma}}</h4></td> <!--|intcomma คือใส่ comma ทุกๆสามหลัก -->
+      </tr>
+
+ 
+    </tbody>
+  </table>
+</div>
+
+<form method="POST">
+  {% csrf_token %}
+  
+  <input type="hidden" id = "name" name="name" value="{{name}}">
+  <input type="hidden" id = "tel" name="tel" value="{{tel}}">
+  <input type="hidden" id = "address" name="address" value="{{address}}">
+  <input type="hidden" id = "shipping" name="shipping" value="{{shipping}}">
+  <input type="hidden" id = "payment" name="payment" value="{{payment}}">
+  <input type="hidden" id = "other" name="other" value="{{other}}">
+  <input type="hidden" id = "page" name="page" value="confirm">
+
+  <button type="submit" class="btn btn-primary">Confirm</button>
+
+</form>
+
+
+{% endblock content %}

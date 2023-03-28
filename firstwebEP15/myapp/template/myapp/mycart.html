@@ -1,0 +1,72 @@
+{% extends 'myapp/base.html' %}
+<!-- EP6 ทำ block content กับหน้า base.html -->
+
+{% load humanize %} <!--EP12 จะทำใส่คอมม่าทุกๆสามหลัก -->
+
+{% block content %}
+<!-- EP11 ตารางแสดงสินค้าของฉัน -->
+
+{% if status == 'delete' %}
+  <div class="alert alert-danger">
+      <strong>ลบสินค้าเรียบร้อบแล้ว!</strong> หากต้องการสินค้าเพิ่ม กรุณากดสั่งซื้อใหม่
+  </div>
+{% endif %}
+
+<div class="container">
+  <h2>ตะกร้าสินค้าของฉัน</h2>
+  <p>สินค้าทั้งหมดของลูกค้าที่อยู่ในตะกร้า พร้อมยืนยันการสั่งซื้อ</p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th>เวลาสั่งซื้อล่าสุด</th>
+        <th>รหัส</th>
+        <th>สินค้า</th>
+        <th>ราคา</th>
+        <th>จำนวน</th>
+        <th>รวมยอด</th>
+        <th>ลบ</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pd in mycart %}
+      <tr>
+        <td>{{pd.stamp}}</td>
+        <td>{{pd.productid}}</td>
+        <td>{{pd.productname}}</td>
+        <td>{{pd.price|intcomma}}</td>
+        <td>{{pd.quantity|intcomma}}</td>
+        <td>{{pd.total|intcomma}}</td>
+
+        <th>
+          <form method="POST" id="form{{pd.productid}}" onsubmit="return confirm('ยืนยันการลยใช่หรือไม่ ?'); ">
+            {% csrf_token %}
+            <input type="hidden" name="productid" value="{{pd.productid}}">
+            <button class="btn btn-danger" > ลบ </button>
+          </form>
+        </th>
+      </tr>        
+      {% endfor %}
+
+      <!--EP12 Sum count and total -->
+      <tr>
+
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h4>{{count|intcomma}}</h4></td>
+        <td><h4>{{total|intcomma}}</h4></td> <!--|intcomma คือใส่ comma ทุกๆสามหลัก -->
+        <td></td>
+      </tr>
+
+
+    </tbody>
+  </table>
+  <a href="{% url 'mycartedit-page' %}" class="btn btn btn-primary">แก้ไขจำนวนสินค้า</a>
+  <div style="padding: 10px;"> </div>
+  <a href="{% url 'checkout-page' %}" class="btn btn btn-primary">Checkout</a>
+</div>
+
+
+
+{% endblock content %}

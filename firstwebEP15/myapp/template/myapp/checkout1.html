@@ -1,0 +1,85 @@
+{% extends 'myapp/base.html' %}
+<!--import base.html ((ไม่ต้องใส่ template/myapp/base.html)เพราะtemplate ตั้งค่าที่setting.แล้ว) -->
+
+{% block content %}
+
+<!--EP13 Checkout-->
+<div class="container" style="margin-bottom: 100px">
+  <h2>ข้อมูลการจัดส่ง</h2>
+  <p>กรุณากรอกข้อมูลการจัดส่งสินค้า</p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <!-- ระบบความปลอดภัยของ Django	-->
+
+    <div class="form-group">
+      <label for="name">ชื่อ-สกุลผู้รับ:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="tel">เบอร์โทรศัพท์:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="tel"
+        last_
+        name="tel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="address">ที่อยู่จัดส่ง</label>
+      <textarea  class="form-control" row="5" id="address" name="address"placeholder="ตัวอย่าง: เลขที่ 20 ถนนพหลโยธิน แขวงสามเสนใน พญาไท กทม.10400"></textarea>
+    </div>
+
+      <p>----------------------</p>
+      <label>เลือกประเภทการจัดส่ง</label>
+
+      <!-- radio nameจะเหมือนกัน เป็นการเลือกตัวใดตัวหนึ่ง เวล่ส่ง submit จะไป ดึงตัว value -->
+    <div class="form-check">
+      <label class="form-check-label" for="ems" >
+        <input type="radio" name="shipping" id="ems" value="ems"> EMS (50 บาท)
+      </label>
+    </div>
+
+
+    <div class="form-check">
+      <label class="form-check-label" for="register" >
+        <input type="radio" name="shipping" id="register" value="register"> ลงทะเบียน (35 บาท)
+      </label>
+    </div>
+
+
+
+    <p>----------------------</p>
+      <label>การชำระเงิน</label>
+
+    <div class="form-check">
+      <label class="form-check-label" for="transfer" >
+        <input type="radio" name="payment" id="transfer" value="transfer">โอนเงินผ่านบัญชีธนาคาร
+      </label>
+    </div>
+
+
+    <div class="form-check">
+      <label class="form-check-label" for="cod" >
+        <input type="radio" name="shipping" id="cod" value="cod">เก็บเงินปลายทาง
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label for="other">หมายเหตุ</label>
+      <textarea  class="form-control" row="5" id="other" name="other"placeholder="ฝากข้อความถึงผู้ขาย"></textarea>  
+    </div>
+
+    <input type="hidden" name="page" value="information">
+    <button type="submit" class="btn btn-primary">Next</button>
+  </form>
+</div>
+{% endblock content %}

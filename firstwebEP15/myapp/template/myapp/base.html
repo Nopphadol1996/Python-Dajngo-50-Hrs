@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="jumbotron text-center" style="margin-bottom: 0">
+      <h1>Uncle Fruits</h1>
+    </div>
+     <!-- EP9 ทำ navebar --> 
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <a class="navbar-brand" href="/">Uncle Store</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#collapsibleNavbar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about-page' %}">เกี่ยวกับเรา</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'contact-page' %}">ติดต่อเรา</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'allproduct-page' %}"
+              >สินค้าทั้งหมด</a
+            >
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="http://example.com"
+              id="dropdown01"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              >ประเภทสินค้า</a
+            >
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="#">สินค้านำเข้าจากญี่ปุ่น</a>
+              <a class="dropdown-item" href="#">สินค้านำเข้าจากจีน</a>
+              <a class="dropdown-item" href="#">สินค้านำเข้าจากอเมริกา</a>
+            </div>
+          </li>
+
+          {% if user.is_authenticated and user.profile.usertype == 'member' %}
+          <li class="nav-item">
+          <a class="nav-link" href="{% url 'mycart-page' %}">ตระกร้า <span class="badge badge-warning">{{user.profile.cartquan}}</span></a>   
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'orderlist-page' %}">รายการสั่งซื้อ<span class="badge badge-warning"></span></a>   
+          </li>
+          <
+         {% endif %}
+         <!-- EP9 ถ้าเป็นaddminให้เห็นเพิ่มสินค้า -->
+         {% if user.is_authenticated and user.profile.usertype == 'admin' %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'addproduct-page' %}">เพิ่มสินค้า</a></li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'allorderlist-page' %}">รายการสั่งซื้อทั้งหมด<span class="badge badge-warning"></span></a>   
+          </li>
+
+            {% endif %}
+          
+          
+        </ul>
+
+        <!-- EP9 ทำProfile usertyep --> 
+        {% if user.is_authenticated %}
+          <img src="{{user.profile.photo.url}}" width="40" height="40" class="round-circle">&nbsp&nbsp&nbsp&nbsp
+          <p style="color: white; margin-top: 10px;">สวัสดีคุณ&nbsp&nbsp {{user.first_name}} {{user.last_name}}&nbsp&nbsp</p>
+          <a class="btn btn-secondary" href="/logout/">ออกจากระบบ</a>
+        {% else %}
+          <a class="btn btn-primary" href="{% url 'register-page' %}">สมัครสมาชิก</a
+          >&nbsp&nbsp&nbsp
+          <a class="btn btn-primary" href="/login/">เข้าสู่ระบบ</a>
+        {% endif %}
+
+      </div>
+    </nav>
+
+    <div class="container" style="margin-top: 30px">
+      {% block content %} {% endblock content %}
+    </div>
+  </body>
+</html>

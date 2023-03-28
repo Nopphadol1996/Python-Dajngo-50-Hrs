@@ -1,0 +1,64 @@
+{% extends 'myapp/base.html' %} <!-- EP6 ทำ block content กับหน้า base.html -->
+
+{% block content %}
+  
+<div class="container">
+
+  <h3>สินค้าทั้งหมดในร้าน</h3>
+  <p>ตอนนี้เรามีสินค้าให้เลือกทั้งหมดหลายรายการ</p>
+
+  <div class="container-fluid"> <!-- EP7 ทำ Grid system -->
+    <div class="row"> <!-- EP7 ทำ Grid system -->
+
+      {% for pd in product %} <!-- EP6 product คือ อ้างอิงจาก key ใน views.py -->
+        <div class="col-sm-4"> <!-- EP7 ทำ Grid system -->
+          <div class="card" style="width:300px; height: 570px;">  
+
+                  {% if pd.image %} <!-- EP7 Showpicture อัพโหลดจากคอมpd.image.url ถ้าเป็น url ใช้ {{ pd.imageurl}} -->
+                  <img class="card-img-top" src="{{ pd.image.url }}" width="300" style="width: 300px; height: 200px; overflow: hidden;">
+                  {% elif pd.imageurl != None %}
+                  <img class="card-img-top" src="{{ pd.imageurl }}" width="300" style="width: 300px; height: 200px; overflow: hidden;"> 
+                  {% else %}
+                     <img class="card-img-top" src="/media/default.png" width="300" style="width: 300px; height: 200px; overflow: hidden;">
+                  {% endif %}
+
+
+              <div class="card-body">
+                <h1 class="card-title">{{ pd.name  }}</h1>
+                <p>ราคา {{ pd.price }} บาท/{{ pd.unit }}</p>
+                <p> {{ pd.detail|linebreaks|truncatechars_html:100}}</p>
+                    <!-- EP8 การตัดคำตัวอักษรใช้ |truncatechars_html:10 คำสั่งนี้ 
+                      django ckeditor -->
+                    <!-- EP8 |linebreaks ขึ้นบรรทัดใหม่ โดยการขึ้นบรรทัดใหม่ใน admin -->
+
+                {%  if pd.quantity > 0 %}
+                  <p>สินค้ามีในสต๊อก: {{ pd.quantity }} {{ pd.unit }} </p>
+
+                {% else %}
+                    <p><font color="red">สินค้าอาจจะหมดสต็อก กรุณาติดต่อแอดมิน</font></p>
+                {% endif %}
+
+                <!-- EP7 ตรวจสอบเงื่อนไข ถ้ามีสินค้าให้แสดงรายการสั่งซื้อ ถ้าไม่มีให้แสดงปุ่มสินค้าหมด -->
+                {% if pd.instock == True %}
+
+                  {% if user.is_authenticated %}
+                  <!-- EP10  pd.id คือต้องการ id ไปใส่ใน url -->
+                      <a href="{% url 'addtocart-page' pd.id %}" class="btn btn-success">สั่งซื้อ</a> 
+                  {% else %}
+                      <a href="{% url 'login' %}" class="btn btn-success">สั่งซื้อ</a>
+
+                    {% endif %}        
+                {% else %}
+                  <a href="#" class="btn btn-warning">สินค้าหมดแล้ว</a> 
+                {% endif %}
+
+              </div>
+          </div><br><br>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+{% endblock content %}

@@ -1,0 +1,43 @@
+{% extends 'myapp/base.html' %}
+<!-- EP6 ทำ block content กับหน้า base.html -->
+
+{% load humanize %} <!--EP12 จะทำใส่คอมม่าทุกๆสามหลัก -->
+
+{% block content %}
+<!-- EP15 ทำสถานะการสั่งซื้อ -->
+
+
+<div class="container">
+  <h2>รายการสั่งซื้อทั้งหมด</h2>
+  <p>รายการสั่งซื้อและสถานะของการสั่งซื้อ</p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th>เวลาสั่งซื้อ</th>
+        <th>Order id</th>
+        <th>ยอดรวม</th>
+        <th>สถานะ</th>
+      </tr>
+    </thead>
+    <tbody> 
+      {% for od in allorder %}
+      <tr>   
+        <td>{{od.stamp}}</td> 
+        <td>{{od.orderid}}</td>
+        <td>{{od.total}}</td>
+        <td>
+        {% if od.paid %}
+            จ่ายเงินแล้ว
+        {% else %}
+            <a href="#" class="btn btn-primary">อัพโหลดสลิป</a>
+        {% endif %}
+        </td>
+      </tr>        
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+
+{% endblock content %}
