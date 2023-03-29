@@ -62,10 +62,11 @@ class OrderPending(models.Model):
 	address = models.TextField()
 	shipping = models.CharField(max_length=100) # EMS
 	payment = models.CharField(max_length=100)  # โอนเงิน พร้อมเพย์ , ธนาคารอะไร
-	other = models.TextField() # หมายเหตุของผู้รับ ต้องใส่ blank=True ด้วย
-	stamp = models.DateTimeField(auto_now_add=True,blank=True,null=True) # ออร์เดอร์ stamp วันไหน
+	other = models.TextField(null=True,blank=True) # หมายเหตุของผู้รับ ต้องใส่ blank=True ด้วย
+	stamp = models.DateTimeField(auto_now_add=True,blank=True,null=True) # ออร์เดอร์ stamp วันไหน 
 	paid = models.BooleanField(default=False) # เช็ตสถานะจ่ายเงินแล้วหรือยัง
 	slip = models.ImageField(upload_to="slip",null=True,blank=True) # อัพโหลด slip แล้วหรือยัง
+	sliptime = models.CharField(max_length=100,null=True,blank=True) # มาเพิ่มเป็นประเภท datetime  พร้อมกับ calendar html EP15
 	paymentid = models.CharField(max_length=100,null=True,blank=True) #เก็บไว้ยังไม่ใช้
 
 

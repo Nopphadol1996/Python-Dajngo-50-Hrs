@@ -15,6 +15,6 @@ urlpatterns = [
     path('mycart/edit/',MyCartEdit,name='mycartedit-page'),# EP11 แก้ไขข้อมูลใน Mycart
     path('checkout/',Checkout,name='checkout-page'), #EP13 Checkout
     path('orderlist/',OrderListPage,name='orderlist-page'),#EP15 OrderList
-     path('allorderlist/',AllOrderListPage,name='allorderlist-page'),#EP15 OrderList สำหรับแอดมินดู
-
+    path('allorderlist/',AllOrderListPage,name='allorderlist-page'),#EP15 OrderList สำหรับแอดมินดู
+    path('uploadslip/<str:orderid>/',UploadSlip,name='uploadslip-page'), # EP16 orderid ต้องตรงกับ parameter ของ function
 ]

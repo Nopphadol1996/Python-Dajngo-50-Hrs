@@ -1,0 +1,54 @@
+{% extends 'myapp/base.html' %}
+<!-- EP6 ทำ block content กับหน้า base.html -->
+
+{% load humanize %}
+
+{% block content %}
+<div class="container" style="margin-bottom: 100px">
+  <h2>อัพโหลดสลิป</h2>
+  <p>อัพโหลดสลิปของ ORDER: {{orderid}}<br>
+    ประเภทการจัดส่ง: {{oddetail.shipping}} <br>
+
+    {% if oddetail.pyment == 'cod' %}
+      
+      บวกค่าเก็บเงินปลายทาง 20 บาท <br>
+
+    {% endif %}
+
+    จำนวนสินค้า: {{count|intcomma}} ชิ้น<br>
+    ยอดรวมสินค้า: {{total|intcomma}} บาท<br>
+    ค่าส่ง: {{shipcost|intcomma}} บาท<br>
+  </p>
+  <h3>รวมยอดโอนทั้งหมด: {{grandtotal|intcomma}} บาท</h3>
+
+
+
+  {% if oddetail.slip %}
+
+      <img src= "{{oddetail.slip.url}}" width="200px;">
+
+  {% else %}
+
+  <!-- EP8 ถ้ามีการ upload file ต้องใส่ enctype="multipart/form-data/form-data" ด้วย-->
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- <form method="POST">  {% csrf_token %} 
+    เป็นแกรมม่าของ Django  EP5 จร้า...-->
+
+  <div class="form-group">
+    <label for="sliptime">วันเวลาที่โอน</label>
+    <input type="text" class="form-control" id="sliptime" name="sliptime" placeholder="ตัวอย่างเช่น 2022/09/30 18:00" />
+  </div>
+
+    <div class="form-group">
+      <label for="slip">ไฟล์สลิปโอนเงิน</label>
+      <input type="file" class="form-control" id="slip" name="slip"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  {% endif %}
+</div>
+
+{% endblock content %}

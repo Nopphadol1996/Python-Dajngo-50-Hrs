@@ -29,7 +29,8 @@
         {% if od.paid %}
             จ่ายเงินแล้ว
         {% else %}
-            <a href="#" class="btn btn-primary">อัพโหลดสลิป</a>
+            <a href="{% url 'uploadslip-page' od.orderid %}" class="btn btn-primary">อัพโหลดสลิป</a>
+            <!-- od.orderid สามารถอ้างถึง order id ได้เลยเพื่อให้ข้อมูลสามารถลิงค์กันได้  -->
         {% endif %}
         </td>
       </tr>        

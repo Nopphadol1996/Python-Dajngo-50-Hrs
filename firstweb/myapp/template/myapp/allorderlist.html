@@ -16,7 +16,7 @@
         <th>เวลาสั่งซื้อ</th>
         <th>Order id</th>
         <th>ยอดรวม</th>
-        <th>สถานะ</th>
+        <th>สลิป</th>
       </tr>
     </thead>
     <tbody> 
@@ -26,10 +26,10 @@
         <td>{{od.orderid}} {{od.name}}</td>
         <td>{{od.total}}</td>
         <td>
-        {% if od.paid %}
-            จ่ายเงินแล้ว
+        {% if od.slip %}
+              <a href="{{od.slip.url}}" >ดูสลิป</a>
         {% else %}
-            <a href="#" class="btn btn-primary">อัพโหลดสลิป</a>
+            <a href="#" class="btn btn-primary">ยังไม่โอน</a>
         {% endif %}
         </td>
       </tr>        

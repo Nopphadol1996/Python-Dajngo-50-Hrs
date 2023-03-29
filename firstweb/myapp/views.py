@@ -352,9 +352,10 @@ def OrderListPage(request):
 	user = User.objects.get(username=username)
 	context =  {}
 
+	# join 2 ตารางรวมกันเพื่อเอาข้อมูลmodels ไปใส่อีก models แต่จะเป็นการชั่วคราว 
 	order  = OrderPending.objects.filter(user=user)  # filter จะใช้กับหลายรายการ
 	for od in order:
-		orderid = od.orderid # ดึงรายการ order ออกมา
+		orderid = od.orderid # ดึงรายการ order ออกมา ของ order ออกมา
 		odlist = OrderList.objects.filter(orderid=orderid)
 		total = sum([ c.total for c in odlist])
 		od.total = total
@@ -380,3 +381,48 @@ def AllOrderListPage(request):
 	context['allorder'] = order # ส่งข้อความแบบ dic  ['allorder'] คือ ชื่อ key
 
 	return render(request, 'myapp/allorderlist.html',context)
+
+# EP 16 Uploadslip
+def UploadSlip(request,orderid): # orderid มาจาก OrderList ของ models
+	print('ORDER ID:',orderid)
+
+	# EP8  import FileSystemStorage เพื่อทำ Upload ข้อมูลจากเครื่อง
+	if request.method == 'POST' and request.FILES['slip']:
+		data = request.POST.copy()
+		sliptime = data.get('sliptime')
+		update = OrderPending.objects.get(orderid=orderid)
+		update.sliptime = sliptime
+
+		############# EP8 Save Image ##############
+		file_image = request.FILES['slip']
+		file_image_name = request.FILES['slip'].name.replace(' ','') # ถ้าชื่อไฟล์มี Spech จะrepalce
+		fs = FileSystemStorage()
+		filename = fs.save(file_image_name,file_image)
+		upload_file_url = fs.url(filename)
+		update.slip = upload_file_url[6:] # [6:] คือการ slide ข้าม media
+		update.save()
+
+	odlist = OrderList.objects.filter(orderid=orderid)
+	total = sum([ c.total for c in odlist])
+	oddetail = OrderPending.objects.get(orderid=orderid)
+	# คำนวนค่าส่งตามประเภท
+	
+	count = sum([ c.quantity for c in odlist])
+	if oddetail.shipping == 'ems':
+		shipcost = sum([50 if i == 0 else 10 for i in range(count)])
+		# shipcost =  ค่ารวมทั้งหมด (หากเป็นชิ้นแรกค่าส่งจะคิด 50 บาท ชัดถัดไป 10 บาท)
+	else:
+		shipcost = sum([30 if i == 0 else 10 for i in range(count)])
+
+	if oddetail.payment == 'cod': # cod มาจาก html ของ checkout1
+		shipcost += 20 # shipcost = shipcost + 20
+
+	context = {'orderid':orderid,
+				'total':total,
+				'shipcost':shipcost,
+				'grandtotal':total+shipcost,
+				'oddetail':oddetail,
+				'count':count}
+
+
+	return render(request, 'myapp/uploadslip.html',context)

@@ -16,7 +16,7 @@ admin.site.register(Cart)
 
  #EP 15 ทำให้เบื้องหลังโชว์เป็นตาราง
 class OrederListAmin(admin.ModelAdmin):
-	list_display = ['orderid','productname','total']  # พวกรายการต้องตรงกับใน models นั้นๆ
+	list_display = ['orderid','productname','price','quantity','total']  # พวกรายการต้องตรงกับใน models นั้นๆ
 
 admin.site.register(OrderList,OrederListAmin) # EP14
 admin.site.register(OrderPending) #EP14
