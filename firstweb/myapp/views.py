@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate ,login # EP9 Login Auto
 from datetime import datetime
 
 
+
 def Home(request):
 	# return HttpResponse('สวัสดีชาวโลก...')
 	product = Allproduct.objects.all().order_by('id').reverse()[:3]
@@ -424,5 +425,41 @@ def UploadSlip(request,orderid): # orderid มาจาก OrderList ของ m
 				'oddetail':oddetail,
 				'count':count}
 
-
 	return render(request, 'myapp/uploadslip.html',context)
+
+#EP17 Update status
+def UpdatePaid(request,orderid,status):
+
+	if request.user.profile.usertype != 'admin': # ถ้าไม่ใช่แอดมินให้กลับไปยัง home page
+		return redirect('home-page')
+
+	order  = OrderPending.objects.get(orderid=orderid)
+	if status == 'confirm':
+		order.paid =True
+	elif status == 'cancel':
+		order.paid = False
+	order.save()
+	return redirect('allorderlist-page')
+
+	#ไม่มีการส่งค่าไปยังเพจอื่น
+
+#EP17 Update เลข EMS
+def UpdateTracking(request,orderid):
+
+
+	if request.user.profile.usertype != 'admin': # ถ้าไม่ใช่แอดมินให้กลับไปยัง home page
+
+		return redirect('home-page')
+	
+	if request.method == 'POST':
+		data = request.POST.copy()
+		order  = OrderPending.objects.get(orderid=orderid)
+		trackingnumber = data.get('trackingnumber')
+		order.trackingnumber = trackingnumber
+		order.save()
+		return redirect('allorderlist-page')
+
+	context = {'orderid':orderid}
+
+
+	return render(request,'myapp/updatetracking.html',context)

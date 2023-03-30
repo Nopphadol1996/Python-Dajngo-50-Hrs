@@ -17,21 +17,49 @@
         <th>Order id</th>
         <th>ยอดรวม</th>
         <th>สลิป</th>
+        <th>จ่ายแล้ว</th>
+        <th>Tacking No.</th>
       </tr>
     </thead>
     <tbody> 
       {% for od in allorder %}
       <tr>   
         <td>{{od.stamp}}</td> 
-        <td>{{od.orderid}} {{od.name}}</td>
+        <td><a href="{% url 'updatetracking' od.orderid %}"> {{od.orderid}}</a> {{od.name}}</td>
         <td>{{od.total}}</td>
         <td>
         {% if od.slip %}
               <a href="{{od.slip.url}}" >ดูสลิป</a>
         {% else %}
-            <a href="#" class="btn btn-primary">ยังไม่โอน</a>
+            <i class="fa fa-window-close" style="font-size:32px;color:red;"></i>
         {% endif %}
         </td>
+
+        <td>
+          {% if od.paid and od.slip%}
+
+          <a href="{% url 'updatestatus' od.orderid 'cancel'%}"> <i class="fa fa-check-square" style="font-size:32px;color:green;"></i></a>
+
+          {% elif od.paid == False and not od.slip %}
+
+            <i class="fa fa-window-close" style="font-size:32px;color:red;"></i>
+
+          {% else %}
+
+           <a class="btn btn-light" href="{% url 'updatestatus' od.orderid 'confirm'%}">
+            <i class="fa fa-plus-square" style="font-size:16px;color:blue;">ยืนยัน</i>
+            </a>
+          
+          {% endif %}
+        </td>
+        <td>
+          {% if od.trackingnumber != None %}
+            {{od.trackingnumber}}
+        {% endif %}
+      </td>
+
+        
+
       </tr>        
       {% endfor %}
     </tbody>

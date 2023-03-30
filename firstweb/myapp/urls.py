@@ -17,4 +17,6 @@ urlpatterns = [
     path('orderlist/',OrderListPage,name='orderlist-page'),#EP15 OrderList
     path('allorderlist/',AllOrderListPage,name='allorderlist-page'),#EP15 OrderList สำหรับแอดมินดู
     path('uploadslip/<str:orderid>/',UploadSlip,name='uploadslip-page'), # EP16 orderid ต้องตรงกับ parameter ของ function
+    path('updatestatus/<str:orderid>/<str:status>/',UpdatePaid,name='updatestatus'), #EP17 อัพเดท status 
+    path('updatetracking/<str:orderid>/',UpdateTracking,name='updatetracking'),#EP17 อัพเดท Tracking 
 ]

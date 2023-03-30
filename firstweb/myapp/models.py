@@ -68,5 +68,9 @@ class OrderPending(models.Model):
 	slip = models.ImageField(upload_to="slip",null=True,blank=True) # อัพโหลด slip แล้วหรือยัง
 	sliptime = models.CharField(max_length=100,null=True,blank=True) # มาเพิ่มเป็นประเภท datetime  พร้อมกับ calendar html EP15
 	paymentid = models.CharField(max_length=100,null=True,blank=True) #เก็บไว้ยังไม่ใช้
+	trackingnumber = models.CharField(max_length=100,null=True,blank=True) # EP17 ส่งเลข พัสดุ
+
+	def __str__(self):
+		return self.name
 
 

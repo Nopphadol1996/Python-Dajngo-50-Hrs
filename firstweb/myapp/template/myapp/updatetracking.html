@@ -1,0 +1,25 @@
+{% extends 'myapp/base.html' %}
+<!--import base.html ((ไม่ต้องใส่ template/myapp/base.html)เพราะtemplate ตั้งค่าที่setting.แล้ว) -->
+
+{% block content %}
+
+<!--EP17 หน้าส่งเลข EMS-->
+<div class="container" style="margin-bottom: 100px">
+  <h2>เลขพัสดุ</h2>
+  <p>ORDERID: {{orderid}}</p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <!-- ระบบความปลอดภัยของ Django	-->
+
+    <div class="form-group">
+      <label for="trackingnumber">เลขพัสดุ / EMS /ลงทะเบียน /</label>
+      <input type="text"class="form-control"id="trackingnumber"name="trackingnumber"
+      />
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endblock content %}

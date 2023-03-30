@@ -17,6 +17,8 @@
         <th>Order id</th>
         <th>ยอดรวม</th>
         <th>สถานะ</th>
+        <th>Tracking No.</th>
+
       </tr>
     </thead>
     <tbody> 
@@ -27,12 +29,18 @@
         <td>{{od.total}}</td>
         <td>
         {% if od.paid %}
-            จ่ายเงินแล้ว
+             <i class="fa fa-money" style="font-size:16px;color:green;"></i> จ่ายเงินแล้ว
         {% else %}
             <a href="{% url 'uploadslip-page' od.orderid %}" class="btn btn-primary">อัพโหลดสลิป</a>
             <!-- od.orderid สามารถอ้างถึง order id ได้เลยเพื่อให้ข้อมูลสามารถลิงค์กันได้  -->
         {% endif %}
         </td>
+        <td>
+          {% if od.trackingnumber != None %}
+            {{od.trackingnumber}}
+        {% endif %}
+      </td>
+
       </tr>        
       {% endfor %}
     </tbody>
