@@ -1,32 +1,12 @@
 {% extends 'myapp/base.html' %}
-<!--import base.html ((ไม่ต้องใส่ template/myapp/base.html)เพราะtemplate ตั้งค่าที่setting.แล้ว) -->
+<!-- EP6 ทำ block content กับหน้า base.html -->
 {% load humanize %} <!--EP12 จะทำใส่คอมม่าทุกๆสามหลัก -->
+<!--EP13 checkout2 -->
 {% block content %}
-
-<!--EP17 หน้าส่งเลข EMS-->
-<div class="container" style="margin-bottom: 100px">
-  <h2>เลขพัสดุ</h2>
-  <p>ORDERID: {{orderid}}</p>
-
-  <form method="POST">
-    {% csrf_token %}
-    <!-- ระบบความปลอดภัยของ Django	-->
-
-    <div class="form-group">
-      <label for="trackingnumber">เลขพัสดุ / EMS /ลงทะเบียน /</label>
-      <input type="text"class="form-control"id="trackingnumber"name="trackingnumber"
-      />
-    </div>
-
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-</div><br>
-
 <div class="container">
   <h3>ข้อมูลการจัดส่ง</h3>
-    ORDERID: {{oder.orderid}}
-    <p>ชื่อผู้รับ: {{oder.name}} <br>
+    ORDERID: {{order.orderid}}
+    <p>ชื่อผู้รับ: {{order.name}} <br>
       เบอร์โทร: {{order.tel}} <br>
       ที่อยู่จัดส่ง: {{order.address}} <br>
       {% if order.shipping == 'ems' %}
@@ -88,5 +68,15 @@
     <p>ค่าส่ง: {{order.shipcost|intcomma}}</p>
     <h3>รวมยอดโอนทั้งหมด: {{total|add:order.shipcost|intcomma}}</h3>
 
+    <h4>โอนมาบัญชีนี้ได้เลย</h4><br>
+      <p>
+      ธนาคารกาสิกร สาขา สยามพารากอน<br>
+      เลขบัญชี: 999999-999999<br>
+      ชื่อบัญชี: ผมหล่อมาก
+    </p>
+
 </div>
+
+
+
 {% endblock content %}

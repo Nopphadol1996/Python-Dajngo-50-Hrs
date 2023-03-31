@@ -16,6 +16,8 @@
         <th>เวลาสั่งซื้อ</th>
         <th>Order id</th>
         <th>ยอดรวม</th>
+        <th>ค่าส่ง</th>
+        <th>ยอดโอน</th>
         <th>สลิป</th>
         <th>จ่ายแล้ว</th>
         <th>Tacking No.</th>
@@ -25,8 +27,11 @@
       {% for od in allorder %}
       <tr>   
         <td>{{od.stamp}}</td> 
-        <td><a href="{% url 'updatetracking' od.orderid %}"> {{od.orderid}}</a> {{od.name}}</td>
+        <td><a href="{% url 'updatetracking' od.orderid %}"> {{od.orderid}}</a> ({{od.name}})</td>
         <td>{{od.total}}</td>
+        <td>{{od.shipcost|intcomma}}</td>
+        <td>{{od.total|add:od.shipcost|intcomma}}</td>  <!-- |add:od.shipcost  |add: คือ django template  -->
+        <!-- total + od.shipcost คือค่าที่คำวนวนจาก viws ถ้า fig |add:"50" ก็จะบวก50 -->
         <td>
         {% if od.slip %}
               <a href="{{od.slip.url}}" >ดูสลิป</a>

@@ -19,4 +19,5 @@ urlpatterns = [
     path('uploadslip/<str:orderid>/',UploadSlip,name='uploadslip-page'), # EP16 orderid ต้องตรงกับ parameter ของ function
     path('updatestatus/<str:orderid>/<str:status>/',UpdatePaid,name='updatestatus'), #EP17 อัพเดท status 
     path('updatetracking/<str:orderid>/',UpdateTracking,name='updatetracking'),#EP17 อัพเดท Tracking 
+    path('myorder/<str:orderid>/',Myorder,name='myorder-page'),#EP18 ทำให้ User เห็นรายการของตัวเองว่ามีอะไรบ้าง 
 ]

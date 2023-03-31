@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage # EP8
 from django.contrib.auth.models import User  # EP8 ทำหน้าสมัครสมาชิก
 from django.contrib.auth import authenticate ,login # EP9 Login Auto
 from datetime import datetime
+from django.core.paginator import Paginator
 
 
 
@@ -76,11 +77,20 @@ def Addproduct(request):
 
 	return render(request,'myapp/addproduct.html')
 
+
 # EP6
 def Product(request):
 
 	# product = Allproduct.objects.all() #EP6 ดึงข้อมูลมาจาก Models .objects.all ดึงข้อมูลมาทั้งหมด
 	product = Allproduct.objects.all().order_by('id').reverse() # EP7  ดึงข้อมูลล่าสุดไว้ด้านบน
+
+	# EP18 Paginator
+	#from django.core.paginator import Paginator
+	paginator = Paginator(product,3) # 1 หน้าโชว์แค่3 ชิ้นเท่านั้น
+	page = request.GET.get('page')
+	product = paginator.get_page(page)
+	# EP18 Paginator
+	
 	context = {'product':product}
 
 	return render(request,'myapp/allproduct.html',context)
@@ -355,15 +365,56 @@ def OrderListPage(request):
 
 	# join 2 ตารางรวมกันเพื่อเอาข้อมูลmodels ไปใส่อีก models แต่จะเป็นการชั่วคราว 
 	order  = OrderPending.objects.filter(user=user)  # filter จะใช้กับหลายรายการ
+		
+			#-order
+			#-orderid: OD100004444555
+			#-user
+			#-name ผู้รับ			
+		
+
 	for od in order:
 		orderid = od.orderid # ดึงรายการ order ออกมา ของ order ออกมา
 		odlist = OrderList.objects.filter(orderid=orderid)
-		total = sum([ c.total for c in odlist])
+
+		
+		#-orderlist
+		#	-object (1)
+		#		-orderid 0D10004444555
+		#		-product ทุเรียน
+		#		-total: 500
+
+		#	-object (2)
+		#		-orderid 0D10004444555777888
+		#		-product กล้วย
+		#		-total: 300
+
+		#	-object (3)
+		#		-orderid 0D10004444555777888999
+		#		-product ส้ม
+		#		-total: 200
+		
+
+		total = sum([ c.total for c in odlist]) # ดึงแค่ total มา sum total = sum[500,300,200]
 		od.total = total
+
+		### EP18 สั่งนับว่า order นี้มีจำนวนกี่ชิ้น
+		count = sum([ c.quantity for c in odlist])
+		if od.shipping == 'ems':
+			shipcost = sum([50 if i == 0 else 10 for i in range(count)])
+		# shipcost =  ค่ารวมทั้งหมด (หากเป็นชิ้นแรกค่าส่งจะคิด 50 บาท ชัดถัดไป 10 บาท)
+		else:
+			shipcost = sum([30 if i == 0 else 10 for i in range(count)])
+
+		if od.payment == 'cod':
+				shipcost += 20
+		od.shipcost = shipcost	
+
+		######### EP18 ######################
 
 	context['allorder'] = order # ส่งข้อความแบบ dic  ['allorder'] คือ ชื่อ key
 
 	return render(request, 'myapp/orderlist.html',context)
+
 
 def AllOrderListPage(request):
 	
@@ -378,6 +429,20 @@ def AllOrderListPage(request):
 		odlist = OrderList.objects.filter(orderid=orderid)
 		total = sum([ c.total for c in odlist])
 		od.total = total
+
+		####### EP18 #######
+		count = sum([ c.quantity for c in odlist])
+		if od.shipping == 'ems':
+			shipcost = sum([50 if i == 0 else 10 for i in range(count)])
+		# shipcost =  ค่ารวมทั้งหมด (หากเป็นชิ้นแรกค่าส่งจะคิด 50 บาท ชัดถัดไป 10 บาท)
+		else:
+			shipcost = sum([30 if i == 0 else 10 for i in range(count)])
+
+		if od.payment == 'cod':
+				shipcost += 20
+		od.shipcost = shipcost	
+		########## EP18 ##########
+
 
 	context['allorder'] = order # ส่งข้อความแบบ dic  ['allorder'] คือ ชื่อ key
 
@@ -414,6 +479,7 @@ def UploadSlip(request,orderid): # orderid มาจาก OrderList ของ m
 		# shipcost =  ค่ารวมทั้งหมด (หากเป็นชิ้นแรกค่าส่งจะคิด 50 บาท ชัดถัดไป 10 บาท)
 	else:
 		shipcost = sum([30 if i == 0 else 10 for i in range(count)])
+
 
 	if oddetail.payment == 'cod': # cod มาจาก html ของ checkout1
 		shipcost += 20 # shipcost = shipcost + 20
@@ -459,7 +525,63 @@ def UpdateTracking(request,orderid):
 		order.save()
 		return redirect('allorderlist-page')
 
-	context = {'orderid':orderid}
+ 	
+	order  = OrderPending.objects.get(orderid=orderid)
+	odlist = OrderList.objects.filter(orderid=orderid)
+	
+	### shipcost calculate
+	total = sum([ c.total for c in odlist])
+	order.total = total # order.total = สิ่งที่เราต้องการแอด   เป็นเรื่องของ oop เก็บค่าชั่วคราว 
+	count = sum([ c.quantity for c in odlist])
+	if order.shipping == 'ems':
+		shipcost = sum([50 if i == 0 else 10 for i in range(count)])
+		# shipcost =  ค่ารวมทั้งหมด (หากเป็นชิ้นแรกค่าส่งจะคิด 50 บาท ชัดถัดไป 10 บาท)
+	else:
+		shipcost = sum([30 if i == 0 else 10 for i in range(count)])
+	if order.payment == 'cod':
+		shipcost += 20
+
+	order.shipcost = shipcost
+
+	context = {'orderid':orderid,'order':order,'odlist':odlist,'total':total,'count':count}
 
 
 	return render(request,'myapp/updatetracking.html',context)
+
+#### EP18 ####
+def Myorder(request,orderid):
+	username = request.user.username
+	user = User.objects.get(username=username)
+	
+	order  = OrderPending.objects.get(orderid=orderid)
+	# เช็คว่าเป็น oder ของตัวเองไหม
+	if user != order.user:
+		return redirect('allproduct-page')
+		# admin ก็เข้าไม่ได้
+
+	odlist = OrderList.objects.filter(orderid=orderid)
+	
+	### shipcost calculate
+	total = sum([ c.total for c in odlist])
+	order.total = total # order.total = สิ่งที่เราต้องการแอด   เป็นเรื่องของ oop เก็บค่าชั่วคราว 
+	count = sum([ c.quantity for c in odlist])
+	if order.shipping == 'ems':
+		shipcost = sum([50 if i == 0 else 10 for i in range(count)])
+		# shipcost =  ค่ารวมทั้งหมด (หากเป็นชิ้นแรกค่าส่งจะคิด 50 บาท ชัดถัดไป 10 บาท)
+	else:
+		shipcost = sum([30 if i == 0 else 10 for i in range(count)])
+
+	if order.payment == 'cod':
+
+		shipcost += 20
+	order.shipcost = shipcost
+	context =  {'order':order,'odlist':odlist,'total':total,'count':count}
+
+	return render(request,'myapp/myorder.html',context)
+		
+
+
+
+
+		
+
