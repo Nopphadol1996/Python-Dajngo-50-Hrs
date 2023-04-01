@@ -69,7 +69,35 @@
       {% endfor %}
     </tbody>
   </table>
-</div>
+</div><br>
+
+<ul class="pagination">
+      {% if allorder.has_previous and allorder.has_next != True %} <!-- หากมีหน้าก่อนหน้า EP19 -->
+        <li class="page-item"><a class="page-link" href="?page={{allorder.previous_page_number}}"> < </a></li>
+        <li class="page-item"><a class="page-link" href="?page={{allorder.number|add:-2}}">{{allorder.number|add:-2}}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{allorder.number|add:-1}}">{{allorder.number|add:-1}}</a></li>
+        <li class="page-item active "><a class="page-link" href="?page={{allorder.number}}">{{allorder.number}}</a></li>
+        <!--<li class="page-item disabled "><a class="page-link" href=""> > </a></li> -->
+
+      {% endif %}
+
+      {% if allorder.has_previous and allorder.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{allorder.previous_page_number}}"> < </a></li>
+      <li class="page-item"><a class="page-link" href="?page={{allorder.number|add:-1}}">{{allorder.number|add:-1}}</a></li>
+      <li class="page-item active "><a class="page-link" href="?page={{allorder.number}}">{{allorder.number}}</a></li> 
+      <li class="page-item"><a class="page-link" href="?page={{allorder.number|add:1}}">{{allorder.number|add:1}}</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{allorder.next_page_number}}"> > </a></li>
+      {% endif %}
+
+      {% if allorder.has_next and allorder.has_previous != True %}  <!-- หากมีหน้าถัดไป -->
+      <li class="page-item active "><a class="page-link" href="?page={{allorder.number}}">{{allorder.number}}</a></li> 
+        <li class="page-item"><a class="page-link" href="?page={{allorder.number|add:1}}">{{allorder.number|add:1}}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{allorder.number|add:2}}">{{allorder.number|add:2}}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{allorder.next_page_number}}"> > </a></li>
+      {% endif %}
+  </ul>
+      <p>{{allorder.number}} จาก {{allorder.paginator.num_pages}} </p>
+
 
 
 

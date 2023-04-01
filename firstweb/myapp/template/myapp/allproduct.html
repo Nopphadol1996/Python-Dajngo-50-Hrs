@@ -59,12 +59,47 @@
     </div>
   </div>
 </div><br>
-  
-  <ul class="pagination">
-    <li class="page-item"><a class="page-link" href="#">ก่อนหน้า</a></li>
-    <li class="page-item"><a class="page-link" href="#">{{product.number}}</a></li>
-    <li class="page-item"><a class="page-link" href="?page={{product.next_page_number}}">ถัดไป</a></li>
 
+
+  <ul class="pagination">
+      {% if product.has_previous and product.has_next != True %} <!-- หากมีหน้าก่อนหน้า EP19 -->
+        <li class="page-item"><a class="page-link" href="?page={{product.previous_page_number}}"> < </a></li>
+        <li class="page-item"><a class="page-link" href="?page={{product.number|add:-2}}">{{product.number|add:-2}}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{product.number|add:-1}}">{{product.number|add:-1}}</a></li>
+        <li class="page-item active "><a class="page-link" href="?page={{product.number}}">{{product.number}}</a></li>
+        <!--<li class="page-item disabled "><a class="page-link" href=""> > </a></li> -->
+
+      {% endif %}
+
+      {% if product.has_previous and product.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{product.previous_page_number}}"> < </a></li>
+      <li class="page-item"><a class="page-link" href="?page={{product.number|add:-1}}">{{product.number|add:-1}}</a></li>
+      <li class="page-item active "><a class="page-link" href="?page={{product.number}}">{{product.number}}</a></li> 
+      <li class="page-item"><a class="page-link" href="?page={{product.number|add:1}}">{{product.number|add:1}}</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{product.next_page_number}}"> > </a></li>
+      {% endif %}
+
+      {% if product.has_next and product.has_previous != True %}  <!-- หากมีหน้าถัดไป -->
+      <li class="page-item active "><a class="page-link" href="?page={{product.number}}">{{product.number}}</a></li> 
+        <li class="page-item"><a class="page-link" href="?page={{product.number|add:1}}">{{product.number|add:1}}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{product.number|add:2}}">{{product.number|add:2}}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{product.next_page_number}}"> > </a></li>
+      {% endif %}
   </ul>
+      <p>{{product.number}} จาก {{product.paginator.num_pages}} </p>
+
 
 {% endblock content %}
+
+<!--
+# http://127.0.0.1:8000/allproduct/?page=1
+[1][2][>]
+
+# http://127.0.0.1:8000/allproduct/?page=2
+[<] [2][3] [>]
+
+# http://127.0.0.1:8000/allproduct/?page=3
+[<] [3]
+
+-->
+

@@ -87,7 +87,7 @@ def Product(request):
 	# EP18 Paginator
 	#from django.core.paginator import Paginator
 	paginator = Paginator(product,3) # 1 หน้าโชว์แค่3 ชิ้นเท่านั้น
-	page = request.GET.get('page')
+	page = request.GET.get('page') # http://127.0.0.1:8000/allproduct/?page=2
 	product = paginator.get_page(page)
 	# EP18 Paginator
 	
@@ -424,6 +424,8 @@ def AllOrderListPage(request):
 	context =  {}
 
 	order  = OrderPending.objects.all()  # filter จะใช้กับหลายรายการ
+
+
 	for od in order:
 		orderid = od.orderid # ดึงรายการ order ออกมา
 		odlist = OrderList.objects.filter(orderid=orderid)
@@ -442,6 +444,12 @@ def AllOrderListPage(request):
 				shipcost += 20
 		od.shipcost = shipcost	
 		########## EP18 ##########
+
+	# EP19 Paginator
+	paginator = Paginator(order,2) # 1 หน้าโชว์แค่ 2 ชิ้นเท่านั้น
+	page = request.GET.get('page') # http://127.0.0.1:8000/allproduct/?page=2
+	order = paginator.get_page(page) # แนบไปกับ context
+
 
 
 	context['allorder'] = order # ส่งข้อความแบบ dic  ['allorder'] คือ ชื่อ key
