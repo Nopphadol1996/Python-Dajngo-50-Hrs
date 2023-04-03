@@ -41,21 +41,21 @@
         </td>
 
         <td>
-          {% if od.paid and od.slip%}
+            {% if od.paid and od.slip%}
 
-          <a href="{% url 'updatestatus' od.orderid 'cancel'%}"> <i class="fa fa-check-square" style="font-size:32px;color:green;"></i></a>
+            <a href="{% url 'updatestatus' od.orderid 'cancel'%}"> <i class="fa fa-check-square" style="font-size:32px;color:green;"></i></a>
 
-          {% elif od.paid == False and not od.slip %}
+            {% elif od.paid == False and not od.slip %}
 
-            <i class="fa fa-window-close" style="font-size:32px;color:red;"></i>
+             <i class="fa fa-window-close" style="font-size:32px;color:red;"></i>
 
-          {% else %}
+            {% else %}
 
-           <a class="btn btn-light" href="{% url 'updatestatus' od.orderid 'confirm'%}">
-            <i class="fa fa-plus-square" style="font-size:16px;color:blue;">ยืนยัน</i>
-            </a>
+                <a class="btn btn-light" href="{% url 'updatestatus' od.orderid 'confirm'%}">
+                    <i class="fa fa-plus-square" style="font-size:16px;color:blue;">ยืนยัน</i>
+                    </a>
           
-          {% endif %}
+            {% endif %}
         </td>
         <td>
           {% if od.trackingnumber != None %}

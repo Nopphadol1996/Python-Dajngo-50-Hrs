@@ -122,6 +122,7 @@ USE_TZ = False # EP10 แก้เวลาเป็นของไทย
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_URL = os.path.join(BASE_DIR,'staticfiles/')
 
 # EP7  สร้าง field ใส่Photo และต้องสร้าง folder media ในตำแหน่งเดียวกับ myapp 
 # และอย่าลืมติดตั้ง pip install pillow (venv) D:\leaning\Dajngo\firstweb>pip install pillow

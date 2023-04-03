@@ -9,6 +9,66 @@ from django.contrib.auth import authenticate ,login # EP9 Login Auto
 from datetime import datetime
 from django.core.paginator import Paginator
 
+### LINE NOTIFY ####
+from songline import Sendline
+token = 'sWs4zv2qIsucLkQVtRG5H0CXDMXktsJyY29Q4bMXagh'
+messenger = Sendline(token)
+
+ ########## Send Email ################
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+def sendthai(sendto,subj="ทดสอบส่งเมลลล์",detail="สวัสดี!\nคุณสบายดีไหม?\n"):
+
+	myemail = 'btshhpsd001@gmail.com'
+	mypassword = ''
+	receiver = sendto
+
+	msg = MIMEMultipart('alternative')
+	msg['Subject'] = subj
+	msg['From'] = 'Admin Big Fruit'
+	msg['To'] = receiver
+	text = detail
+
+	part1 = MIMEText(text, 'plain')
+	msg.attach(part1)
+
+	s = smtplib.SMTP('smtp.gmail.com:587')
+	s.ehlo()
+	s.starttls()
+
+	s.login(myemail, mypassword)
+	s.sendmail(myemail, receiver.split(','), msg.as_string())
+	s.quit()
+
+
+###########Start sending#############
+subject = 'ยืนยันสมัครสมาชิก'
+
+newmember_nane = 'สามชาย'
+
+content = '''สวัสดีคุณลูกค้า 
+กรุณายืนยันอีเมล์ ผ่านลิงค์ด้านล่าง
+'''
+link = 'http://Bts-psd/confrim/qxnsbrkdjnpryeiu'
+
+msg = 'สวัสดีคุณ {}\n\n {}\n Verify Ling {} '.format(newmember_nane,content,link)
+
+# sendthai('btshhpsd001@gmail.com',subject,msg)
+
+
+
+# หากต้องการส่งหลายคนสามารถใส่คอมม่าใน string ได้เลย เช่น 'loongTu1@gmail.com,loongTu2@gmail.com'
+
+
+'''
+-------------------------
+ตั้งค่าให้เป็นสีเขียวก่อนส่ง แล้วลองรีเฟรชดู ( on )
+https://myaccount.google.com/lesssecureapps
+'''
+
+
 
 
 def Home(request):
@@ -112,6 +172,11 @@ def Register(request):
 		newuser.last_name = last_name
 		newuser.set_password(password)
 		newuser.save()
+
+		########### EP21 Send Email ###### *** testing
+
+		sendthai('btshhpsd001@gmail.com',subject,msg)
+
 
 		# EP9 AUtoLogin
 		# from .models import Allproduct,Profile # import  Profile ด้วย
@@ -324,6 +389,11 @@ def Checkout(request):
 			dt = datetime.now().strftime('%Y%m%d%H%M%S') # ทำหรัสจากวันที่เพื่อจะได้ไม่ให้ซ้ำกัน
 			orderid = 'OD' + mid + dt # รวมกันเป็นรหัสID ที่ไม่ซ้ำกันแน่นอน
 
+			#### EP21 Sent To LINE ###
+			productorder = ''
+			producttotal = 0
+
+
 			for pd in mycart:	
 				order = OrderList()
 				order.orderid  = orderid # เมื่อได้แล้วไปเก็บลงใน models ของ OrderList
@@ -333,6 +403,18 @@ def Checkout(request):
 				order.quantity = pd.quantity
 				order.total = pd.total
 				order.save()
+
+				#### EP21 Sent To LINE ###
+				productorder = productorder + '- {}\n'.format(pd.productname) # รายการสินค้า
+				producttotal += pd.total
+
+			texttoline = 'ODID: {}\n---\n{}ยอดรวม: {:,.2f} บาท'.format(orderid,productorder,producttotal,name)
+
+			if producttotal > 10000:
+				messenger.sticker(14,1,texttoline)
+			else:
+				messenger.sendtext(texttoline)
+
 
 			# EP14 Create OderPinding 
 			# พวก user,name,tel,address,shipping,payment,other มาจาก หน้า html เดียวกันไม่ต้อง get ค่าใหม่
